@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject bulletPrefab;
+    public Transform bulletPosition;
     public float speed = 5;
     public float radius;
     public LayerMask mask;
@@ -11,6 +13,8 @@ public class PlayerController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     private bool thereIsAWall = false;
+    private float currentShootingTime;
+    private float maxShootingTime = .5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +24,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentShootingTime += Time.deltaTime;
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         thereIsAWall = Physics2D.OverlapCircle(transform.position, radius, mask);
@@ -39,13 +44,14 @@ public class PlayerController : MonoBehaviour
 
             transform.eulerAngles += new Vector3(0, 0, -90);
         }
-        //if (Input.GetKeyDown(KeyCode.LeftArrow))
-        //    direction = Vector2.left;
-        //else if (Input.GetKeyDown(KeyCode.RightArrow))
-        //    direction = Vector2.right;
-        //else if (Input.GetKeyDown(KeyCode.UpArrow))
-        //    direction = Vector2.up;
-        //else if (Input.GetKeyDown(KeyCode.DownArrow))
-        //    direction = Vector2.down;
+        if (Input.GetButton("Jump") && currentShootingTime >= maxShootingTime)
+        {
+            Shoot();
+            currentShootingTime = 0;
+        }
+    }
+    void Shoot()
+    {
+        GameObject go = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
     }
 }
