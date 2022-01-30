@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2179767552575690224}
   - component: {fileID: -1763755786730095879}
   - component: {fileID: 8303931251289731739}
-  m_Layer: 0
-  m_Name: Bullet
-  m_TagString: Untagged
+  m_Layer: 8
+  m_Name: PlayerBullet
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1.5
 --- !u!114 &-1763755786730095879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +114,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  damage: 0
+  tagString: Enemy
 --- !u!50 &8303931251289731739
 Rigidbody2D:
   serializedVersion: 4

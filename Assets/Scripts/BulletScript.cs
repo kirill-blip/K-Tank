@@ -5,12 +5,8 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour
 {
     public float speed;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-            
-    }
+    public int damage;
+    public string tagString;
 
     // Update is called once per frame
     void Update()
@@ -19,8 +15,14 @@ public class BulletScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player" || collision.tag == "Enemy") Destroy(collision.gameObject);
-        Debug.Log("Hello");
+        //if(collision.tag == tagString) Destroy(collision.gameObject);
+
+
+        var damageables = collision.GetComponentsInChildren<IDamageable>();
+        foreach (var damageable in damageables)
+        {
+            damageable.Damage(damage);
+        }
         Destroy(gameObject);
     }
 }
