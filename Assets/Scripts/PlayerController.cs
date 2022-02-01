@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,21 +10,16 @@ public class PlayerController : MonoBehaviour, IDamageable
     public Transform movePoint;
     public float speed = 5;
     public float radius;
+    public float distance = 0.2f;
     public float dis = .8f;
     public LayerMask mask;
 
     public LayerMask whatStopsMovement;
-    private float horizontalInput;
-    private float verticalInput;
-    private bool thereIsAWall = false;
+
     private float currentShootingTime;
     private float maxShootingTime = .5f;
 
-    private Vector3 direction = Vector3.up;
-    private bool isMoving = false;
-    private Vector3 origPos;
-    private Vector3 targetPos;
-    private float timeToMove = .01f;
+    public event EventHandler<GameObject> playerDestroyed;
 
     // Start is called before the first frame update
     void Start()
@@ -36,19 +32,23 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, movePoint.position) <= 0.025f)
+
+        if (Vector3.Distance(transform.position, movePoint.position) <= distance)
         {
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
             {
                 if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f), radius, whatStopsMovement))
                 {
+
                     if (Input.GetAxisRaw("Horizontal") < 0)
                     {
                         movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") + dis, 0f, 0f);
+                        transform.eulerAngles = new Vector3(0f, 0f, 90f);
                     }
                     if (Input.GetAxisRaw("Horizontal") > 0)
                     {
                         movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") - dis, 0f, 0f);
+                        transform.eulerAngles = new Vector3(0f, 0f, -90f);
                     }
                 }
             }
@@ -57,68 +57,35 @@ public class PlayerController : MonoBehaviour, IDamageable
                 if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f), radius, whatStopsMovement))
                 {
                     if (Input.GetAxisRaw("Vertical") < 0f)
+                    {
                         movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical") + dis, 0f);
+                        transform.eulerAngles = new Vector3(0f, 0f, 180f);
+                    }
                     else if (Input.GetAxisRaw("Vertical") > 0f)
+                    {
                         movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical") - dis, 0f);
-
+                        transform.eulerAngles = Vector3.zero;
+                    }
                 }
             }
         }
 
         currentShootingTime += Time.deltaTime;
-        //horizontalInput = Input.GetAxis("Horizontal");
-        //verticalInput = Input.GetAxis("Vertical");
-        thereIsAWall = Physics2D.OverlapCircle(transform.position, radius, mask);
-        //if (!thereIsAWall && !isMoving)
-        //{
-        //    transform.Translate(Vector2.up * speed * Time.deltaTime * verticalInput);
-        //}
 
-
-
-        //if (Input.GetButtonDown("RotateToLeft"))
-        //{
-        //    //direction = transform.eulerAngles;
-
-        //    transform.eulerAngles += new Vector3(0, 0, 90);
-        //}
-        //else if (Input.GetButtonDown("RotateToRight"))
-        //{
-
-        //    transform.eulerAngles += new Vector3(0, 0, -90);
-        //}
         if (Input.GetButton("Jump") && currentShootingTime >= maxShootingTime)
         {
             Shoot();
             currentShootingTime = 0;
         }
     }
+
     void Shoot()
     {
         GameObject go = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
     }
-    public void Damage(int damage)
+    public void Damage(int damage, Vector3 rotationOfBullet)
     {
-        //if (tag != "Player")
+        playerDestroyed?.Invoke(this, gameObject);
         Destroy(gameObject);
-    }
-    private IEnumerator MoveByGrid()
-    {
-        isMoving = true;
-
-        float elapsedTime = 0;
-
-        origPos = transform.position;
-        targetPos = origPos + direction;
-
-        while (elapsedTime < timeToMove)
-        {
-            transform.position = Vector3.Lerp(origPos, targetPos, (elapsedTime / timeToMove));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        transform.position = targetPos;
-
-        isMoving = false;
     }
 }

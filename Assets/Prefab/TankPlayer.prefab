@@ -432,6 +432,7 @@ GameObject:
   - component: {fileID: 8106859789180283066}
   - component: {fileID: 8106859789180283071}
   - component: {fileID: 8106859789180283069}
+  - component: {fileID: 1481913903}
   m_Layer: 3
   m_Name: TankPlayer
   m_TagString: Player
@@ -473,9 +474,10 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1642375522471859995, guid: ce5bc572f122c4348915584aa6a32ba4, type: 3}
   bulletPosition: {fileID: 8106859788540119450}
   movePoint: {fileID: 1350652593}
-  speed: 5
+  speed: 6.5
   radius: 0.25
-  dis: 0.5
+  distance: 0.2
+  dis: 0.75
   mask:
     serializedVersion: 2
     m_Bits: 64
@@ -498,10 +500,10 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 18a556cd24123b444847d20418b22873, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!70 &8106859789180283069
 CapsuleCollider2D:
@@ -516,9 +518,35 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.012592681, y: 0.053778533}
-  m_Size: {x: 1.9103947, y: 1.6659501}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.5, y: 1}
   m_Direction: 1
+--- !u!61 &1481913903
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8106859789180283067}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &8106859789201752513
 GameObject:
   m_ObjectHideFlags: 0

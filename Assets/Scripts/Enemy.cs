@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Pathfinding;
 using System.Collections.Generic;
+using System;
 public class Enemy : MonoBehaviour, IDamageable
 {
     public float speed = 5;
@@ -13,12 +14,16 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public GameObject bulletPrefab;
     public Transform bulletTransform;
+
+    private ParticleSystem particleSystem;
+    public event EventHandler<GameObject> enemyDestroyed;
     private void Start()
     {
+        particleSystem = GetComponentInChildren<ParticleSystem>();
         currentRotation = rotations[3];
         currentDir = dir[3];
 
-        index = Random.Range(0, rotations.Length);
+        index = UnityEngine.Random.Range(0, rotations.Length);
         currentDir = dir[index];
         currentRotation = rotations[index];
         transform.eulerAngles = currentRotation;
@@ -55,15 +60,19 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     void RandomRotateEnemy()
     {
-        index = Random.Range(0, rotations.Length);
+        index = UnityEngine.Random.Range(0, rotations.Length);
         currentDir = dir[index];
         currentRotation = rotations[index];
         transform.eulerAngles = currentRotation;
     }
 
-    public void Damage(int damage)
+    public void Damage(int damage, Vector3 rotationOfBullet)
     {
+        particleSystem.transform.parent = null;
+        particleSystem.Play();
+        particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
         //if (tag != "Enemy")
+        enemyDestroyed?.Invoke(this, gameObject);
         Destroy(gameObject);
     }
 }

@@ -17,7 +17,7 @@ public class BaseScript : MonoBehaviour, IDamageable
 
     }
 
-    public void Damage(int damage)
+    public void Damage(int damage, Vector3 rotationOfBullet)
     {
         //if (tag != "Player")
         baseDestroyed?.Invoke(this, this.gameObject);
