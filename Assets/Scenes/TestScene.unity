@@ -903,6 +903,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8106859789180283066, guid: 654b831e4756a0943b123205067c43c6, type: 3}
+      propertyPath: gridSize.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8106859789180283066, guid: 654b831e4756a0943b123205067c43c6, type: 3}
+      propertyPath: gridSize.y
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 8106859789180283067, guid: 654b831e4756a0943b123205067c43c6, type: 3}
       propertyPath: m_Name
       value: TankPlayer
@@ -913,11 +921,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8106859789180283068, guid: 654b831e4756a0943b123205067c43c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.75
+      value: 3.25
       objectReference: {fileID: 0}
     - target: {fileID: 8106859789180283068, guid: 654b831e4756a0943b123205067c43c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: -2.9999998
       objectReference: {fileID: 0}
     - target: {fileID: 8106859789180283068, guid: 654b831e4756a0943b123205067c43c6, type: 3}
       propertyPath: m_LocalPosition.z
