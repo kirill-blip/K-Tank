@@ -44,21 +44,15 @@ public class PlayerController : MonoBehaviour, IDamageable
                 if (Input.GetAxisRaw("Horizontal") < 0)
                 {
                     dis = Mathf.Abs(dis);
+                    transform.eulerAngles = new Vector3(0f, 0f, 90f);
                 }
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
                     dis = -Mathf.Abs(dis);
+                    transform.eulerAngles = new Vector3(0f, 0f, -90f);
                 }
                 if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal") + dis, 0f, 0f), radius, whatStopsMovement))
                 {
-                    if (Input.GetAxisRaw("Horizontal") < 0)
-                    {
-                        transform.eulerAngles = new Vector3(0f, 0f, 90f);
-                    }
-                    if (Input.GetAxisRaw("Horizontal") > 0)
-                    {
-                        transform.eulerAngles = new Vector3(0f, 0f, -90f);
-                    }
 
                     movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") + dis, 0f, 0f);
                 }
@@ -68,21 +62,15 @@ public class PlayerController : MonoBehaviour, IDamageable
                 if (Input.GetAxisRaw("Vertical") < 0)
                 {
                     dis = Mathf.Abs(dis);
+                    transform.eulerAngles = new Vector3(0f, 0f, 180f);
                 }
                 if (Input.GetAxisRaw("Vertical") > 0)
                 {
                     dis = -Mathf.Abs(dis);
+                    transform.eulerAngles = Vector3.zero;
                 }
                 if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical") + dis, 0f), radius, whatStopsMovement))
                 {
-                    if (Input.GetAxisRaw("Vertical") < 0f)
-                    {
-                        transform.eulerAngles = new Vector3(0f, 0f, 180f);
-                    }
-                    else if (Input.GetAxisRaw("Vertical") > 0f)
-                    {
-                        transform.eulerAngles = Vector3.zero;
-                    }
                     movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical") + dis, 0f);
                 }
             }

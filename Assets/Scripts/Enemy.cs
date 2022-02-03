@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Pathfinding;
 using System.Collections.Generic;
 using System;
 public class Enemy : MonoBehaviour, IDamageable
