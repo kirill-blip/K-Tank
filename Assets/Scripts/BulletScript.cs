@@ -19,6 +19,7 @@ public class BulletScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.tag == "Bonus") return;
         particleSystem.Play();
         particleSystem.transform.parent = null;
         particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
@@ -28,7 +29,7 @@ public class BulletScript : MonoBehaviour
         {
             damageable.Damage(damage, transform.localEulerAngles);
         }
-        
+
         //StartCoroutine(WaitForDestroy());
         Destroy(gameObject);
     }

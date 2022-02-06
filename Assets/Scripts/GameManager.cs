@@ -7,13 +7,13 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+    public List<GameObject> enemyPrefabs;
     public Transform[] enemySpawnPositions;
     public List<Rigidbody2D> enemyRigigbodys;
     public int countOfEnemy = 10;
     public int countOfEnemyOnScene;
     public int needToKill;
-
+    bool isStopped;
     [SerializeField] private float spawnTime = 3f;
     private float currentSpawnTime;
     public BaseScript baseGO;
@@ -21,17 +21,72 @@ public class GameManager : MonoBehaviour
 
     private PlayerController playerController;
 
-    private List<GameObject> enemies;
     private void Start()
     {
         needToKill = countOfEnemy;
-
-        
 
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         playerController.playerDestroyed += PlayerController_playerDestroyed;
         baseGO = GameObject.Find("Base").GetComponent<BaseScript>();
         baseGO.baseDestroyed += GameManager_baseDestroyed;
+    }
+
+    public void GameManager_onBonus(object sender, BonusType type)
+    {
+        switch (type)
+        {
+            case BonusType.shootingTime:
+                StartCoroutine(ChangeShootingTime());
+                break;
+            case BonusType.stopTimeForEnemy:
+                StartCoroutine(StoppingEnemy());
+                break;
+            case BonusType.bomb:
+                var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                foreach (var enemy in enemies)
+                {
+                    Destroy(enemy);
+                    countOfEnemyOnScene--;
+                    needToKill--;
+                    Debug.Log("Enemy destoy");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    IEnumerator StoppingEnemy()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        isStopped = true;
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Enemy>().speed = 0;
+        }
+        yield return new WaitForSeconds(15f);
+        isStopped = false;
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Enemy>().speed = 5;
+        }
+    }
+    float temp;
+    IEnumerator ChangeShootingTime()
+    {
+        if (!playerController.timeOfShootingChanged)
+        {
+            temp = playerController.maxShootingTime;
+            playerController.maxShootingTime /= 2;
+            playerController.timeOfShootingChanged = true;
+        }
+        yield return new WaitForSeconds(15f);
+        if (playerController.timeOfShootingChanged)
+        {
+            playerController.maxShootingTime = temp;
+            playerController.timeOfShootingChanged = false;
+        }
+
     }
 
     private void PlayerController_playerDestroyed(object sender, GameObject e)
@@ -76,8 +131,16 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         enemyRigigbodys[index].gameObject.SetActive(false);
-        GameObject enemy = Instantiate(enemyPrefab, enemyPos.position, enemyPos.rotation);
+
+        int randomEnemyIndex = UnityEngine.Random.Range(0, enemyPrefabs.Count);
+
+        GameObject enemy = Instantiate(enemyPrefabs[randomEnemyIndex], enemyPos.position, enemyPos.rotation);
         enemy.GetComponent<Enemy>().enemyDestroyed += GameManager_enemyDestroyed;
+        if (isStopped)
+            enemy.GetComponent<Enemy>().speed = 0;
+        else if (!isStopped)
+            enemy.GetComponent<Enemy>().speed = 5;
+
     }
     private void GameManager_enemyDestroyed(object sender, GameObject e)
     {

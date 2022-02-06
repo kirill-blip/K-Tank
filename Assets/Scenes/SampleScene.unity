@@ -1921,7 +1921,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a47c6f0ad7932040aca1249affb958a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  enemyPrefabs:
+  - {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  - {fileID: 7560245323059677691, guid: f8325492b800a4344868d788f97e311f, type: 3}
   enemySpawnPositions:
   - {fileID: 35268615}
   - {fileID: 1614188648}
@@ -1932,7 +1934,7 @@ MonoBehaviour:
   - {fileID: 552418579}
   countOfEnemy: 25
   countOfEnemyOnScene: 0
-  needToKill: 0
+  needToKill: 25
   spawnTime: 2.5
   baseGO: {fileID: 0}
   countOfEnemiesText: {fileID: 1264883756}
@@ -4618,7 +4620,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101816668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.75, y: -18, z: 0}
+  m_LocalPosition: {x: 4.5, y: -18, z: 0}
   m_LocalScale: {x: 7, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 791137769}
@@ -5536,7 +5538,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Use WASD or Arrows to move
+  m_Text: 'Use WASD or Arrows to move
+
+    Use Spase to shoot
+
+'
 --- !u!222 &1570207319
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8340,7 +8346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2064853134}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.75, y: -21.5, z: 0}
+  m_LocalPosition: {x: 4.5, y: -21.5, z: 0}
   m_LocalScale: {x: 7, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 791137769}

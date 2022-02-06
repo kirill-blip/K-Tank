@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, IDamageable
 {
     #region
-
     public GameObject bulletPrefab;
     public Transform bulletPosition;
     public Transform movePoint;
@@ -18,7 +17,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     public LayerMask whatStopsMovement;
 
     private float currentShootingTime;
-    private float maxShootingTime = .5f;
+    public float maxShootingTime = .5f;
+    public bool timeOfShootingChanged = false;
 
     public event EventHandler<GameObject> playerDestroyed;
 
@@ -96,4 +96,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         playerDestroyed?.Invoke(this, gameObject);
         Destroy(gameObject);
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+       
+    }
+    
+
 }

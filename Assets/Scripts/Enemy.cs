@@ -14,10 +14,14 @@ public class Enemy : MonoBehaviour, IDamageable
     public GameObject bulletPrefab;
     public Transform bulletTransform;
 
+    public bool canShoot = true;
+
     private ParticleSystem particleSystem;
     public event EventHandler<GameObject> enemyDestroyed;
+    public Rigidbody2D enemyRigidbody;
     private void Start()
     {
+        enemyRigidbody  = GetComponent<Rigidbody2D>();
         particleSystem = GetComponentInChildren<ParticleSystem>();
         currentRotation = rotations[3];
         currentDir = dir[3];
@@ -46,7 +50,7 @@ public class Enemy : MonoBehaviour, IDamageable
             RandomRotateEnemy();
         }
         currentTime += Time.deltaTime;
-        if (currentTime >= maxTime)
+        if (currentTime >= maxTime && canShoot)
         {
             Shoot();
             currentTime = 0;
@@ -65,7 +69,7 @@ public class Enemy : MonoBehaviour, IDamageable
         transform.eulerAngles = currentRotation;
     }
 
-    public void Damage(int damage, Vector3 rotationOfBullet)
+    public virtual void Damage(int damage, Vector3 rotationOfBullet)
     {
         particleSystem.transform.parent = null;
         particleSystem.Play();
