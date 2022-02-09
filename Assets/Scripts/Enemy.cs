@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public GameObject bulletPrefab;
     public Transform bulletTransform;
 
-    public bool canShoot = true;
+    public bool canShoot;
 
     private ParticleSystem particleSystem;
     public event EventHandler<GameObject> enemyDestroyed;
@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     int index;
     float currentTime = 0;
-    float maxTime = 3f;
+    float maxTime = 2f;
     private void Update()
     {
         if (!Physics2D.Raycast(transform.position, currentDir, 1, obstacleMask))
@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour, IDamageable
             RandomRotateEnemy();
         }
         currentTime += Time.deltaTime;
-        if (currentTime >= maxTime && canShoot)
+        if (currentTime >= maxTime && canShoot == true)
         {
             Shoot();
             currentTime = 0;
@@ -76,6 +76,11 @@ public class Enemy : MonoBehaviour, IDamageable
         particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
         //if (tag != "Enemy")
         enemyDestroyed?.Invoke(this, gameObject);
+        Destroy(gameObject);
+    }
+
+    public virtual void DestroyTank()
+    {
         Destroy(gameObject);
     }
 }

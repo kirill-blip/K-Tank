@@ -8,6 +8,8 @@ TagManager:
   - Bullet
   - Obstacles
   - Bonus
+  - Base
+  - Water
   layers:
   - Default
   - TransparentFX

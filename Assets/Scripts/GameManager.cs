@@ -7,28 +7,26 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    public List<GameObject> enemyPrefabs;
-    public Transform[] enemySpawnPositions;
-    public List<Rigidbody2D> enemyRigigbodys;
-    public int countOfEnemy = 10;
-    public int countOfEnemyOnScene;
-    public int needToKill;
-    bool isStopped;
-    [SerializeField] private float spawnTime = 3f;
-    private float currentSpawnTime;
+    public bool isStopped;
     public BaseScript baseGO;
     public Text countOfEnemiesText;
-
+    public int levelId;
+    private EnemySpawnManager enemySpawnManager;
     private PlayerController playerController;
 
     private void Start()
     {
-        needToKill = countOfEnemy;
-
+        enemySpawnManager = GetComponent<EnemySpawnManager>();
+        enemySpawnManager.spawnFinished += UpdateCountOfEnemies;
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         playerController.playerDestroyed += PlayerController_playerDestroyed;
         baseGO = GameObject.Find("Base").GetComponent<BaseScript>();
         baseGO.baseDestroyed += GameManager_baseDestroyed;
+    }
+
+    private void UpdateCountOfEnemies(object sender, int e)
+    {
+        countOfEnemiesText.text = "Count of enemies: " + e;
     }
 
     public void GameManager_onBonus(object sender, BonusType type)
@@ -45,11 +43,13 @@ public class GameManager : MonoBehaviour
                 var enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (var enemy in enemies)
                 {
-                    Destroy(enemy);
-                    countOfEnemyOnScene--;
-                    needToKill--;
+                    enemy.GetComponent<Enemy>().DestroyTank();
                     Debug.Log("Enemy destoy");
                 }
+                break;
+            case BonusType.boat:
+                playerController.boat.SetActive(true);
+                playerController.canMoveOnWater = true;
                 break;
             default:
                 break;
@@ -62,13 +62,16 @@ public class GameManager : MonoBehaviour
         foreach (var enemy in enemies)
         {
             enemy.GetComponent<Enemy>().speed = 0;
+            enemy.GetComponent<Enemy>().canShoot = false;
         }
         yield return new WaitForSeconds(15f);
+
         isStopped = false;
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
         {
             enemy.GetComponent<Enemy>().speed = 5;
+            enemy.GetComponent<Enemy>().canShoot = true;
         }
     }
     float temp;
@@ -102,49 +105,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-
-        currentSpawnTime += Time.deltaTime;
-
-        if (currentSpawnTime >= spawnTime && countOfEnemy > 0)
+        int countEnemiesOnScene = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        if(enemySpawnManager.GetCountEnemiesToSpawn() == 0 && countEnemiesOnScene == 0)
         {
-            SpawnEnemy();
-            currentSpawnTime = 0;
+            SceneManager.LoadScene(levelId);
         }
-        if (countOfEnemyOnScene == 0 && needToKill <= 0)
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        countOfEnemiesText.text = "Count of enemies: " + needToKill;
-    }
-
-    void SpawnEnemy()
-    {
-        countOfEnemy--;
-        int index = UnityEngine.Random.Range(0, enemySpawnPositions.Length);
-        Transform enemySpawnPosition = enemySpawnPositions[index];
-        Rigidbody2D rigid = enemyRigigbodys[index];
-        rigid.gameObject.SetActive(true);
-        rigid.AddTorque(100);
-
-        StartCoroutine(WaitForSpawn(enemySpawnPosition, index));
-        countOfEnemyOnScene++;
-    }
-    IEnumerator WaitForSpawn(Transform enemyPos, int index)
-    {
-        yield return new WaitForSeconds(1.5f);
-        enemyRigigbodys[index].gameObject.SetActive(false);
-
-        int randomEnemyIndex = UnityEngine.Random.Range(0, enemyPrefabs.Count);
-
-        GameObject enemy = Instantiate(enemyPrefabs[randomEnemyIndex], enemyPos.position, enemyPos.rotation);
-        enemy.GetComponent<Enemy>().enemyDestroyed += GameManager_enemyDestroyed;
-        if (isStopped)
-            enemy.GetComponent<Enemy>().speed = 0;
-        else if (!isStopped)
-            enemy.GetComponent<Enemy>().speed = 5;
-
-    }
-    private void GameManager_enemyDestroyed(object sender, GameObject e)
-    {
-        countOfEnemyOnScene--;
-        needToKill--;
     }
 }

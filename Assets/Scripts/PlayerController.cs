@@ -12,9 +12,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     public float speed = 5;
     public float radius;
     public float distance = 0.2f;
-    public LayerMask mask;
 
     public LayerMask whatStopsMovement;
+    public LayerMask onlyObstacleMask;
 
     private float currentShootingTime;
     public float maxShootingTime = .5f;
@@ -25,10 +25,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField]
     private float dis = .8f;
     #endregion
-
+    public Transform pos;
+    public GameObject boat;
+    public bool canMoveOnWater;
     // Start is called before the first frame update
     void Start()
     {
+        boat.SetActive(false);
         movePoint.parent = null;
     }
     // Update is called once per frame
@@ -43,40 +46,33 @@ public class PlayerController : MonoBehaviour, IDamageable
             {
                 if (Input.GetAxisRaw("Horizontal") < 0)
                 {
-                    dis = Mathf.Abs(dis);
+                    dis = -Mathf.Abs(dis);
                     transform.eulerAngles = new Vector3(0f, 0f, 90f);
                 }
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
-                    dis = -Mathf.Abs(dis);
                     transform.eulerAngles = new Vector3(0f, 0f, -90f);
+                    dis = Mathf.Abs(dis);
                 }
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal") + dis, 0f, 0f), radius, whatStopsMovement))
-                {
-
-                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal") + dis, 0f, 0f);
-                }
+                if (CanMove(new Vector3(dis, 0f, 0f)))
+                    movePoint.position += new Vector3(dis, 0f, 0f);
             }
             else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
             {
                 if (Input.GetAxisRaw("Vertical") < 0)
                 {
-                    dis = Mathf.Abs(dis);
+                    dis = -Mathf.Abs(dis);
                     transform.eulerAngles = new Vector3(0f, 0f, 180f);
                 }
                 if (Input.GetAxisRaw("Vertical") > 0)
                 {
-                    dis = -Mathf.Abs(dis);
+                    dis = Mathf.Abs(dis);
                     transform.eulerAngles = Vector3.zero;
                 }
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical") + dis, 0f), radius, whatStopsMovement))
-                {
-                    movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical") + dis, 0f);
-                }
+                if (CanMove(new Vector3(0, dis, 0f)))
+                    movePoint.position += new Vector3(0f, dis, 0f);
             }
         }
-
-
 
         // Shooting
         currentShootingTime += Time.deltaTime;
@@ -86,6 +82,14 @@ public class PlayerController : MonoBehaviour, IDamageable
             Shoot();
             currentShootingTime = 0;
         }
+    }
+
+    bool CanMove(Vector3 point)
+    {
+        if (canMoveOnWater)
+            return !Physics2D.OverlapCircle(movePoint.position + point, radius, onlyObstacleMask);
+        else
+            return !Physics2D.OverlapCircle(movePoint.position + point, radius, whatStopsMovement);
     }
     void Shoot()
     {
@@ -98,8 +102,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       
+
     }
-    
+
 
 }

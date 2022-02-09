@@ -286,7 +286,7 @@ MonoBehaviour:
   speed: 5
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 80
   enemyMask:
     serializedVersion: 2
     m_Bits: 128
@@ -298,6 +298,8 @@ MonoBehaviour:
   - {fileID: 6119215618284326782, guid: e8d12277d378c2c4599176e7e2c31c3e, type: 3}
   - {fileID: 3015442488688355941, guid: 9690c32093bd08746ad95ab6db7f73ec, type: 3}
   - {fileID: 5371050678225680038, guid: c1079d7f795d75d4dbfb2982d909b5a4, type: 3}
+  - {fileID: 5371050678225680038, guid: c1079d7f795d75d4dbfb2982d909b5a4, type: 3}
+  - {fileID: 176649176345373038, guid: eec43cee31acd794e8da68f97a294932, type: 3}
 --- !u!1 &7560245323192709555
 GameObject:
   m_ObjectHideFlags: 0
