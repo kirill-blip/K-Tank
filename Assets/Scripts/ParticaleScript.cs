@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class ParticaleScript : MonoBehaviour
 {
+    public ParticleSystem particleSystem;
+
+    private void Awake()
+    {
+        particleSystem = GetComponent<ParticleSystem>();
+    }
     public void DestroyParticaleSystem()
     {
         StartCoroutine(WaitForDestroy());

@@ -10,18 +10,25 @@ public class GameManager : MonoBehaviour
     public bool isStopped;
     public BaseScript baseGO;
     public Text countOfEnemiesText;
+    public Text healthText;
     public int levelId;
+    public Transform playerPoint;
+    public Rigidbody2D playerPointRigid;
     private EnemySpawnManager enemySpawnManager;
     private PlayerController playerController;
 
     private void Start()
     {
+        playerPointRigid = playerPoint.GetComponentInChildren<Rigidbody2D>();
+        playerPointRigid.gameObject.SetActive(false);
+
         enemySpawnManager = GetComponent<EnemySpawnManager>();
         enemySpawnManager.spawnFinished += UpdateCountOfEnemies;
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         playerController.playerDestroyed += PlayerController_playerDestroyed;
         baseGO = GameObject.Find("Base").GetComponent<BaseScript>();
         baseGO.baseDestroyed += GameManager_baseDestroyed;
+        healthText.text = "Health: " + playerController.GetHealth();
     }
 
     private void UpdateCountOfEnemies(object sender, int e)
@@ -34,7 +41,8 @@ public class GameManager : MonoBehaviour
         switch (type)
         {
             case BonusType.shootingTime:
-                StartCoroutine(ChangeShootingTime());
+                playerController.turboShooting = true;
+                //StartCoroutine(ChangeShootingTime());
                 break;
             case BonusType.stopTimeForEnemy:
                 StartCoroutine(StoppingEnemy());
@@ -94,7 +102,36 @@ public class GameManager : MonoBehaviour
 
     private void PlayerController_playerDestroyed(object sender, GameObject e)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (playerController.GetHealth() == 0)
+        {
+            StartCoroutine(LoadSceneInTime());
+            return;
+        }
+        healthText.text = "Health: " + playerController.GetHealth();
+        StartCoroutine(SetActivePlayer());
+    }
+    IEnumerator SetActivePlayer()
+    {
+        playerPointRigid.gameObject.SetActive(true);
+        playerPointRigid.AddTorque(200f);
+        yield return new WaitForSeconds(.5f);
+
+        playerController.particleSystem.Stop();
+        playerController.gameObject.SetActive(false);
+        playerController.transform.position = playerPoint.position;
+        playerController.movePoint.position = playerPoint.position;
+        yield return new WaitForSeconds(1.5f);
+
+        playerController.GetComponent<Collider2D>().enabled = true;
+        playerController.gameObject.SetActive(true);
+        playerController.canMove = true;
+        playerPointRigid.gameObject.SetActive(false);
+    }
+
+    IEnumerator LoadSceneInTime()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(0);
     }
 
     private void GameManager_baseDestroyed(object sender, GameObject baseGO)
@@ -106,7 +143,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         int countEnemiesOnScene = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        if(enemySpawnManager.GetCountEnemiesToSpawn() == 0 && countEnemiesOnScene == 0)
+        if (enemySpawnManager.GetCountEnemiesToSpawn() == 0 && countEnemiesOnScene == 0)
         {
             SceneManager.LoadScene(levelId);
         }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, IDamageable
 {
     #region
+    public int health = 3;
     public GameObject bulletPrefab;
     public Transform bulletPosition;
     public Transform movePoint;
@@ -21,6 +22,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     public bool timeOfShootingChanged = false;
 
     public event EventHandler<GameObject> playerDestroyed;
+    public bool canMove = true;
+    public bool turboShooting = false;
+    public GameObject bullet;
+
 
     [SerializeField]
     private float dis = .8f;
@@ -33,55 +38,53 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         boat.SetActive(false);
         movePoint.parent = null;
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
     // Update is called once per frame
     void Update()
     {
         // Movement
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
-
-        if (Vector3.Distance(transform.position, movePoint.position) == distance)
+        if (canMove)
         {
-            if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
+            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, movePoint.position) == distance)
             {
-                if (Input.GetAxisRaw("Horizontal") < 0)
+                if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
                 {
-                    dis = -Mathf.Abs(dis);
-                    transform.eulerAngles = new Vector3(0f, 0f, 90f);
+                    if (Input.GetAxisRaw("Horizontal") < 0)
+                    {
+                        dis = -Mathf.Abs(dis);
+                        transform.eulerAngles = new Vector3(0f, 0f, 90f);
+                    }
+                    if (Input.GetAxisRaw("Horizontal") > 0)
+                    {
+                        transform.eulerAngles = new Vector3(0f, 0f, -90f);
+                        dis = Mathf.Abs(dis);
+                    }
+                    if (CanMove(new Vector3(dis, 0f, 0f)))
+                        movePoint.position += new Vector3(dis, 0f, 0f);
                 }
-                if (Input.GetAxisRaw("Horizontal") > 0)
+                else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
                 {
-                    transform.eulerAngles = new Vector3(0f, 0f, -90f);
-                    dis = Mathf.Abs(dis);
+                    if (Input.GetAxisRaw("Vertical") < 0)
+                    {
+                        dis = -Mathf.Abs(dis);
+                        transform.eulerAngles = new Vector3(0f, 0f, 180f);
+                    }
+                    if (Input.GetAxisRaw("Vertical") > 0)
+                    {
+                        dis = Mathf.Abs(dis);
+                        transform.eulerAngles = Vector3.zero;
+                    }
+                    if (CanMove(new Vector3(0, dis, 0f)))
+                        movePoint.position += new Vector3(0f, dis, 0f);
                 }
-                if (CanMove(new Vector3(dis, 0f, 0f)))
-                    movePoint.position += new Vector3(dis, 0f, 0f);
-            }
-            else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
-            {
-                if (Input.GetAxisRaw("Vertical") < 0)
-                {
-                    dis = -Mathf.Abs(dis);
-                    transform.eulerAngles = new Vector3(0f, 0f, 180f);
-                }
-                if (Input.GetAxisRaw("Vertical") > 0)
-                {
-                    dis = Mathf.Abs(dis);
-                    transform.eulerAngles = Vector3.zero;
-                }
-                if (CanMove(new Vector3(0, dis, 0f)))
-                    movePoint.position += new Vector3(0f, dis, 0f);
             }
         }
 
         // Shooting
-        currentShootingTime += Time.deltaTime;
-
-        if (Input.GetButton("Jump") && currentShootingTime >= maxShootingTime)
-        {
-            Shoot();
-            currentShootingTime = 0;
-        }
+        Shoot();
     }
 
     bool CanMove(Vector3 point)
@@ -93,17 +96,40 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     void Shoot()
     {
-        GameObject go = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
+        if (bullet == null && Input.GetButton("Jump"))
+        {
+            bullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
+        }
+        else if(turboShooting)
+        {
+            currentShootingTime += Time.deltaTime;
+            if (Input.GetKey(KeyCode.E) && currentShootingTime >= maxShootingTime)
+            {
+                GameObject tempBullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
+                currentShootingTime = 0;
+            }
+        }
     }
+    public ParticleSystem particleSystem;
     public void Damage(int damage, Vector3 rotationOfBullet)
     {
+        health--;
+        canMove = false;
+        particleSystem.Play();
+        GetComponent<Collider2D>().enabled = false;
         playerDestroyed?.Invoke(this, gameObject);
-        Destroy(gameObject);
+
     }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
     }
 
+    public int GetHealth()
+    {
+        return health;
+    }
 
 }
