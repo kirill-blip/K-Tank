@@ -5779,7 +5779,7 @@ MonoBehaviour:
   baseGO: {fileID: 1047124180}
   countOfEnemiesText: {fileID: 148060735}
   healthText: {fileID: 77515007}
-  levelId: 0
+  levelId: 2
   playerPoint: {fileID: 1279054427}
   playerPointRigid: {fileID: 0}
 --- !u!114 &1397512179

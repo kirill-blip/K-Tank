@@ -6,12 +6,9 @@ public class BulletScript : MonoBehaviour
 {
     public float speed;
     public int damage;
+    public bool canDestroyBush = false;
 
     public ParticleSystem particleSystem;
-    private void Start()
-    {
-        //particleSystem.Play();
-    }
     // Update is called once per frame
     void Update()
     {
@@ -20,6 +17,7 @@ public class BulletScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Bonus" || collision.gameObject.CompareTag("Water")) return;
+        if (collision.gameObject.tag == "Bush" && !canDestroyBush) return;
         particleSystem.Play();
         particleSystem.transform.parent = null;
         particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
@@ -30,12 +28,6 @@ public class BulletScript : MonoBehaviour
             damageable.Damage(damage, transform.localEulerAngles);
         }
 
-        //StartCoroutine(WaitForDestroy());
         Destroy(gameObject);
-    }
-
-    IEnumerator WaitForDestroy()
-    {
-        yield return new WaitForSeconds(.05f);
     }
 }

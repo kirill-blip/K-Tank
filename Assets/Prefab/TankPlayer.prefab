@@ -5038,7 +5038,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -2
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.42626378, g: 0.9716981, b: 0.4281512, a: 0.29803923}
+  m_Color: {r: 0.87616414, g: 0.42745098, b: 0.972549, a: 0.29803923}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5668,29 +5668,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5fdc629a778df40ad63077aebc7f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boatGO: {fileID: 2001379619}
+  shieldGO: {fileID: 1426944911}
   health: 3
   bulletPrefab: {fileID: 1642375522471859995, guid: ce5bc572f122c4348915584aa6a32ba4, type: 3}
   bulletPosition: {fileID: 8106859788540119450}
   movePoint: {fileID: 1350652593}
   speed: 5.5
   radius: 0.9
-  distance: 0
+  stopDistance: 0
   whatStopsMovement:
     serializedVersion: 2
     m_Bits: 80
   onlyObstacleMask:
     serializedVersion: 2
     m_Bits: 64
+  distance: 1
   maxShootingTime: 0.25
   timeOfShootingChanged: 0
   canMove: 1
   turboShooting: 0
-  bullet: {fileID: 0}
   hasShield: 0
-  shieldGO: {fileID: 1426944911}
-  dis: 1
-  pos: {fileID: 533307553}
-  boat: {fileID: 2001379619}
+  canDestroyBush: 0
   canMoveOnWater: 0
   particleSystem: {fileID: 198559267}
 --- !u!50 &8106859789180283071

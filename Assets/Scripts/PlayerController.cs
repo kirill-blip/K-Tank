@@ -5,43 +5,56 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
-    #region
+    public GameObject boatGO;
+    public GameObject shieldGO;
+
     public int health = 3;
+
     public GameObject bulletPrefab;
     public Transform bulletPosition;
+
     public Transform movePoint;
     public float speed = 5;
     public float radius;
-    public float distance = 0.2f;
-
+    public float stopDistance = 0.2f;
     public LayerMask whatStopsMovement;
     public LayerMask onlyObstacleMask;
 
-    private float currentShootingTime;
+    [SerializeField]
+    private float distance = .8f;
+
     public float maxShootingTime = .5f;
     public bool timeOfShootingChanged = false;
+    private float currentShootingTime;
 
-    public event EventHandler<GameObject> playerDestroyed;
     public bool canMove = true;
     public bool turboShooting = false;
-    public GameObject bullet;
     public bool hasShield = false;
-    public GameObject shieldGO;
-
-
-    [SerializeField]
-    private float dis = .8f;
-    #endregion
-    public Transform pos;
-    public GameObject boat;
+    public bool canDestroyBush;
     public bool canMoveOnWater;
+
+    private GameObject bullet;
+    public event EventHandler<GameObject> playerDestroyed;
     // Start is called before the first frame update
     void Start()
     {
         particleSystem.gameObject.SetActive(true);
-        boat.SetActive(false);
+        boatGO.SetActive(false);
         movePoint.parent = null;
         particleSystem = GetComponentInChildren<ParticleSystem>();
+        if (PlayerPrefs.GetInt("HaveBoat") == 1)
+        {
+            canMoveOnWater = true;
+            boatGO.SetActive(true);
+        }
+        if (PlayerPrefs.GetInt("TurboShooting") == 1)
+        {
+            turboShooting = true;
+        }
+        if (PlayerPrefs.GetInt("CanDestroyBush") == 1)
+        {
+            canDestroyBush = true;
+        }
     }
     // Update is called once per frame
     void Update()
@@ -51,37 +64,37 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
 
-            if (Vector3.Distance(transform.position, movePoint.position) == distance)
+            if (Vector3.Distance(transform.position, movePoint.position) == stopDistance)
             {
                 if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
                 {
                     if (Input.GetAxisRaw("Horizontal") < 0)
                     {
-                        dis = -Mathf.Abs(dis);
+                        distance = -Mathf.Abs(distance);
                         transform.eulerAngles = new Vector3(0f, 0f, 90f);
                     }
                     if (Input.GetAxisRaw("Horizontal") > 0)
                     {
                         transform.eulerAngles = new Vector3(0f, 0f, -90f);
-                        dis = Mathf.Abs(dis);
+                        distance = Mathf.Abs(distance);
                     }
-                    if (CanMove(new Vector3(dis, 0f, 0f)))
-                        movePoint.position += new Vector3(dis, 0f, 0f);
+                    if (CanMove(new Vector3(distance, 0f, 0f)))
+                        movePoint.position += new Vector3(distance, 0f, 0f);
                 }
                 else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
                 {
                     if (Input.GetAxisRaw("Vertical") < 0)
                     {
-                        dis = -Mathf.Abs(dis);
+                        distance = -Mathf.Abs(distance);
                         transform.eulerAngles = new Vector3(0f, 0f, 180f);
                     }
                     if (Input.GetAxisRaw("Vertical") > 0)
                     {
-                        dis = Mathf.Abs(dis);
+                        distance = Mathf.Abs(distance);
                         transform.eulerAngles = Vector3.zero;
                     }
-                    if (CanMove(new Vector3(0, dis, 0f)))
-                        movePoint.position += new Vector3(0f, dis, 0f);
+                    if (CanMove(new Vector3(0, distance, 0f)))
+                        movePoint.position += new Vector3(0f, distance, 0f);
                 }
             }
         }
@@ -104,12 +117,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             currentShootingTime = 0;
             bullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
+            bullet.GetComponent<BulletScript>().canDestroyBush = canDestroyBush;
         }
         else if (turboShooting)
         {
             if (Input.GetKey(KeyCode.E) && currentShootingTime >= maxShootingTime)
             {
                 GameObject tempBullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
+                tempBullet.GetComponent<BulletScript>().canDestroyBush = canDestroyBush;
                 currentShootingTime = 0;
             }
         }

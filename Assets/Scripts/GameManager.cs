@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private EnemySpawnManager enemySpawnManager;
     private PlayerController playerController;
 
+
     private void Start()
     {
         playerPointRigid = playerPoint.GetComponentInChildren<Rigidbody2D>();
@@ -29,13 +30,17 @@ public class GameManager : MonoBehaviour
         baseGO = GameObject.Find("Base").GetComponent<BaseScript>();
         baseGO.baseDestroyed += GameManager_baseDestroyed;
         healthText.text = "Health: " + playerController.GetHealth();
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            PlayerPrefs.DeleteKey("HaveBoat");
+            PlayerPrefs.DeleteKey("TurboShooting");
+        }
     }
 
     private void UpdateCountOfEnemies(object sender, int e)
     {
         countOfEnemiesText.text = "Count of enemies: " + e;
     }
-
     public void GameManager_onBonus(object sender, BonusType type)
     {
         switch (type)
@@ -56,11 +61,14 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case BonusType.boat:
-                playerController.boat.SetActive(true);
+                playerController.boatGO.SetActive(true);
                 playerController.canMoveOnWater = true;
                 break;
             case BonusType.shield:
                 StartCoroutine(SetActiveShield());
+                break;
+            case BonusType.destroyBush:
+                playerController.canDestroyBush = true;
                 break;
             default:
                 break;
@@ -93,29 +101,11 @@ public class GameManager : MonoBehaviour
             enemy.GetComponent<Enemy>().canShoot = true;
         }
     }
-    float temp;
-    IEnumerator ChangeShootingTime()
-    {
-        if (!playerController.timeOfShootingChanged)
-        {
-            temp = playerController.maxShootingTime;
-            playerController.maxShootingTime /= 2;
-            playerController.timeOfShootingChanged = true;
-        }
-        yield return new WaitForSeconds(15f);
-        if (playerController.timeOfShootingChanged)
-        {
-            playerController.maxShootingTime = temp;
-            playerController.timeOfShootingChanged = false;
-        }
-
-    }
-
     private void PlayerController_playerDestroyed(object sender, GameObject e)
     {
         if (playerController.GetHealth() == 0)
         {
-            StartCoroutine(LoadSceneInTime());
+            StartCoroutine(LoadSceneInTime(0, 1));
             return;
         }
         healthText.text = "Health: " + playerController.GetHealth();
@@ -139,10 +129,22 @@ public class GameManager : MonoBehaviour
         playerPointRigid.gameObject.SetActive(false);
     }
 
-    IEnumerator LoadSceneInTime()
+    int i;
+    int i1;
+    IEnumerator LoadSceneInTime(int id, float time)
     {
-        yield return new WaitForSeconds(1);
-        SceneManager.LoadScene(0);
+        if (id != 0)
+        {
+            if (playerController.canMoveOnWater)
+                PlayerPrefs.SetInt("HaveBoat", 1);
+            if (playerController.turboShooting)
+                PlayerPrefs.SetInt("TurboShooting", 1);
+            if (playerController.canDestroyBush)
+                PlayerPrefs.SetInt("CanDestroyBush", 1);
+
+        }
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(id);
     }
 
     private void GameManager_baseDestroyed(object sender, GameObject baseGO)
@@ -156,7 +158,7 @@ public class GameManager : MonoBehaviour
         int countEnemiesOnScene = GameObject.FindGameObjectsWithTag("Enemy").Length;
         if (enemySpawnManager.GetCountEnemiesToSpawn() == 0 && countEnemiesOnScene == 0)
         {
-            SceneManager.LoadScene(levelId);
+            StartCoroutine(LoadSceneInTime(levelId, 5f));
         }
     }
 }
