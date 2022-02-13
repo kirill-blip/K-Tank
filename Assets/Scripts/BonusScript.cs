@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using UnityEngine;
+
 public enum BonusType
 {
     shootingTime,
@@ -11,10 +10,12 @@ public enum BonusType
     shield,
     destroyBush
 }
+
 public class BonusScript : MonoBehaviour
 {
     public BonusType type;
     public event EventHandler<BonusType> onBonus;
+
     private void Awake()
     {
         onBonus += Camera.main.GetComponent<GameManager>().GameManager_onBonus;

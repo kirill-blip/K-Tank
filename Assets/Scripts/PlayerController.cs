@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamageable
@@ -35,6 +33,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private GameObject bullet;
     public event EventHandler<GameObject> playerDestroyed;
+
+    public new ParticleSystem particleSystem;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -129,7 +130,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             }
         }
     }
-    public ParticleSystem particleSystem;
+    
     public void Damage(int damage, Vector3 rotationOfBullet)
     {
         if (hasShield) return;
@@ -138,18 +139,13 @@ public class PlayerController : MonoBehaviour, IDamageable
         particleSystem.Play();
         GetComponent<Collider2D>().enabled = false;
         playerDestroyed?.Invoke(this, gameObject);
-
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {
-
-    }
+    { }
 
     public int GetHealth()
     {
         return health;
     }
-
 }
