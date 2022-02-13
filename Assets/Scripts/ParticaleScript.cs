@@ -1,10 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ParticaleScript : MonoBehaviour
 {
-    public ParticleSystem particleSystem;
+    public new ParticleSystem particleSystem;
 
     private void Awake()
     {

@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using System;
+﻿using System;
+using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageable
 {
     public float speed = 5;
@@ -16,12 +15,13 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public bool canShoot;
 
-    private ParticleSystem particleSystem;
+    private new ParticleSystem particleSystem;
     public event EventHandler<GameObject> enemyDestroyed;
     public Rigidbody2D enemyRigidbody;
+    
     private void Start()
     {
-        enemyRigidbody  = GetComponent<Rigidbody2D>();
+        enemyRigidbody = GetComponent<Rigidbody2D>();
         particleSystem = GetComponentInChildren<ParticleSystem>();
         currentRotation = rotations[3];
         currentDir = dir[3];
@@ -31,9 +31,11 @@ public class Enemy : MonoBehaviour, IDamageable
         currentRotation = rotations[index];
         transform.eulerAngles = currentRotation;
     }
+    
     int index;
     float currentTime = 0;
     float maxTime = 2f;
+    
     private void Update()
     {
         if (!Physics2D.Raycast(transform.position, currentDir, 1, obstacleMask))
@@ -61,6 +63,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         GameObject go = Instantiate(bulletPrefab, bulletTransform.position, bulletTransform.rotation);
     }
+    
     void RandomRotateEnemy()
     {
         index = UnityEngine.Random.Range(0, rotations.Length);
@@ -74,7 +77,6 @@ public class Enemy : MonoBehaviour, IDamageable
         particleSystem.transform.parent = null;
         particleSystem.Play();
         particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
-        //if (tag != "Enemy")
         enemyDestroyed?.Invoke(this, gameObject);
         Destroy(gameObject);
     }
