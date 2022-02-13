@@ -59,9 +59,20 @@ public class GameManager : MonoBehaviour
                 playerController.boat.SetActive(true);
                 playerController.canMoveOnWater = true;
                 break;
+            case BonusType.shield:
+                StartCoroutine(SetActiveShield());
+                break;
             default:
                 break;
         }
+    }
+    IEnumerator SetActiveShield()
+    {
+        playerController.hasShield = true;
+        playerController.shieldGO.gameObject.SetActive(true);
+        yield return new WaitForSeconds(10f);
+        playerController.hasShield = false;
+        playerController.shieldGO.gameObject.SetActive(false);
     }
     IEnumerator StoppingEnemy()
     {

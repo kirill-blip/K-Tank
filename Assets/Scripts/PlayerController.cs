@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     public bool canMove = true;
     public bool turboShooting = false;
     public GameObject bullet;
+    public bool hasShield = false;
+    public GameObject shieldGO;
 
 
     [SerializeField]
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     void Start()
     {
+        particleSystem.gameObject.SetActive(true);
         boat.SetActive(false);
         movePoint.parent = null;
         particleSystem = GetComponentInChildren<ParticleSystem>();
@@ -96,13 +99,14 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     void Shoot()
     {
-        if (bullet == null && Input.GetButton("Jump"))
+        currentShootingTime += Time.deltaTime;
+        if (bullet == null && Input.GetButton("Jump") && currentShootingTime >= .25f)
         {
+            currentShootingTime = 0;
             bullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
         }
-        else if(turboShooting)
+        else if (turboShooting)
         {
-            currentShootingTime += Time.deltaTime;
             if (Input.GetKey(KeyCode.E) && currentShootingTime >= maxShootingTime)
             {
                 GameObject tempBullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
@@ -113,6 +117,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public ParticleSystem particleSystem;
     public void Damage(int damage, Vector3 rotationOfBullet)
     {
+        if (hasShield) return;
         health--;
         canMove = false;
         particleSystem.Play();

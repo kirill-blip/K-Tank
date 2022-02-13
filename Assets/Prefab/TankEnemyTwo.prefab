@@ -300,6 +300,7 @@ MonoBehaviour:
   - {fileID: 5371050678225680038, guid: c1079d7f795d75d4dbfb2982d909b5a4, type: 3}
   - {fileID: 5371050678225680038, guid: c1079d7f795d75d4dbfb2982d909b5a4, type: 3}
   - {fileID: 176649176345373038, guid: eec43cee31acd794e8da68f97a294932, type: 3}
+  - {fileID: 6389837684719771957, guid: 781845f7e4daaf3468f94353d38bc168, type: 3}
 --- !u!1 &7560245323192709555
 GameObject:
   m_ObjectHideFlags: 0
@@ -5597,3 +5598,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4de9f6df017b2b74883c76cdc39f0685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleSystem: {fileID: 0}

@@ -7,7 +7,8 @@ public enum BonusType
     shootingTime,
     stopTimeForEnemy,
     bomb,
-    boat
+    boat,
+    shield
 }
 public class BonusScript : MonoBehaviour
 {
