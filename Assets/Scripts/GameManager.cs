@@ -2,11 +2,11 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using System;
 public class GameManager : MonoBehaviour
 {
     public bool isStopped;
-    public BaseScript baseGO;
+    public HomeScript baseGO;
     public Text countOfEnemiesText;
     public Text healthText;
     public int levelId;
@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public Rigidbody2D playerPointRigid;
     private EnemySpawnManager enemySpawnManager;
     private PlayerController playerController;
-
 
     private void Start()
     {
@@ -25,13 +24,14 @@ public class GameManager : MonoBehaviour
         enemySpawnManager.spawnFinished += UpdateCountOfEnemies;
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         playerController.playerDestroyed += PlayerController_playerDestroyed;
-        baseGO = GameObject.Find("Base").GetComponent<BaseScript>();
-        baseGO.baseDestroyed += GameManager_baseDestroyed;
+        baseGO = GameObject.Find("Base").GetComponent<HomeScript>();
+        baseGO.homeDestroyed += GameManager_baseDestroyed;
         healthText.text = "Health: " + playerController.GetHealth();
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
             PlayerPrefs.DeleteKey("HaveBoat");
             PlayerPrefs.DeleteKey("TurboShooting");
+            PlayerPrefs.DeleteKey("CanDestroyBush");
         }
     }
 
@@ -67,6 +67,9 @@ public class GameManager : MonoBehaviour
                 break;
             case BonusType.destroyBush:
                 playerController.canDestroyBush = true;
+                break;
+            case BonusType.ironBonus:
+                baseGO.GetComponent<HomeScript>().ChangeWall();
                 break;
             default:
                 break;
@@ -127,8 +130,6 @@ public class GameManager : MonoBehaviour
         playerPointRigid.gameObject.SetActive(false);
     }
 
-    int i;
-    int i1;
     IEnumerator LoadSceneInTime(int id, float time)
     {
         if (id != 0)

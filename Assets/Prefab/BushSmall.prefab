@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 5812068710236477607}
   - component: {fileID: 1123972834562109443}
   - component: {fileID: 1846696315}
-  - component: {fileID: 1846696314}
+  - component: {fileID: 774819578}
   m_Layer: 0
   m_Name: bushes (3)
   m_TagString: Bush
@@ -144,7 +144,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1846696314
+--- !u!114 &774819578
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,10 +153,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3061564789959755424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ba36fc2193fd474cb962f0195ffbcd3, type: 3}
+  m_Script: {fileID: 11500000, guid: e4b949fa568b2fc469f14d1ec928120d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  briks: []
 --- !u!1 &5131518402218832739
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +167,7 @@ GameObject:
   - component: {fileID: 5738744925808964635}
   - component: {fileID: 2786090490611640343}
   - component: {fileID: 335518173}
-  - component: {fileID: 335518172}
+  - component: {fileID: 388042205}
   m_Layer: 0
   m_Name: bushes (1)
   m_TagString: Bush
@@ -267,7 +266,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &335518172
+--- !u!114 &388042205
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -276,10 +275,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5131518402218832739}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ba36fc2193fd474cb962f0195ffbcd3, type: 3}
+  m_Script: {fileID: 11500000, guid: e4b949fa568b2fc469f14d1ec928120d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  briks: []
 --- !u!1 &5702526388634185522
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +289,7 @@ GameObject:
   - component: {fileID: 3966120850062717539}
   - component: {fileID: 16235782284471313}
   - component: {fileID: 1379209175}
-  - component: {fileID: 1379209174}
+  - component: {fileID: 921893018}
   m_Layer: 0
   m_Name: bushes
   m_TagString: Bush
@@ -390,7 +388,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1379209174
+--- !u!114 &921893018
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -399,10 +397,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5702526388634185522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ba36fc2193fd474cb962f0195ffbcd3, type: 3}
+  m_Script: {fileID: 11500000, guid: e4b949fa568b2fc469f14d1ec928120d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  briks: []
 --- !u!1 &6538017622779136195
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +411,7 @@ GameObject:
   - component: {fileID: 2582571018814219861}
   - component: {fileID: 1205909642235116074}
   - component: {fileID: 211086459}
-  - component: {fileID: 211086458}
+  - component: {fileID: 2035915155}
   m_Layer: 0
   m_Name: bushes (2)
   m_TagString: Bush
@@ -513,7 +510,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &211086458
+--- !u!114 &2035915155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -522,7 +519,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6538017622779136195}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ba36fc2193fd474cb962f0195ffbcd3, type: 3}
+  m_Script: {fileID: 11500000, guid: e4b949fa568b2fc469f14d1ec928120d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  briks: []

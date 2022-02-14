@@ -8,7 +8,8 @@ public enum BonusType
     bomb,
     boat,
     shield,
-    destroyBush
+    destroyBush,
+    ironBonus
 }
 
 public class BonusScript : MonoBehaviour

@@ -3,6 +3,7 @@ using UnityEngine;
 public class WallScript : MonoBehaviour, IDamageable
 {
     public GameObject[] briks;
+    public bool isWallIron;
     private SpriteRenderer spriteRenderer;
     private void Start()
     {
@@ -11,6 +12,7 @@ public class WallScript : MonoBehaviour, IDamageable
 
     public void Damage(int damage, Vector3 rotationOfBullet)
     {
+        if (isWallIron) return;
         //Vector3 rotation = collision2D.gameObject.transform.localEulerAngles;
         if (rotationOfBullet == new Vector3(0, 0, 180) || rotationOfBullet == new Vector3(0, 0, 0))
         {

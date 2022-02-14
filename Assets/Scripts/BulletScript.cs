@@ -16,9 +16,18 @@ public class BulletScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (collision.gameObject.tag == "Bonus" || collision.gameObject.CompareTag("Water")) return;
-        if (collision.gameObject.tag == "Bush" && !canDestroyBush) return;
-        
+        if (collision.gameObject.tag == "Bush" && !canDestroyBush)
+        {
+            return;
+        }
+        else if (canDestroyBush && collision.gameObject.tag == "Bush")
+        {
+            collision.GetComponent<IDamageable>().Damage(damage, transform.localEulerAngles);
+            return;
+        }
+
         particleSystem.Play();
         particleSystem.transform.parent = null;
         particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
