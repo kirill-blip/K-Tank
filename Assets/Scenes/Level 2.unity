@@ -5814,13 +5814,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesPrefabs:
-  - {fileID: 7560245323059677691, guid: f8325492b800a4344868d788f97e311f, type: 3}
   - {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  - {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  - {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  - {fileID: 7442576318195819505, guid: 111ccf7a134fc784fb355eed37eea161, type: 3}
+  - {fileID: 7560245323059677691, guid: f8325492b800a4344868d788f97e311f, type: 3}
+  - {fileID: 5159805113276211883, guid: b798ec8502399cc48b07d0d780bd8312, type: 3}
   spawnTransforms:
   - {fileID: 1680936682}
   - {fileID: 392986588}
   - {fileID: 6134363}
   needToKill: 25
+  enemyOnScene: 4
   spawnTime: 3
   spawnRigidbodies:
   - {fileID: 376700064}

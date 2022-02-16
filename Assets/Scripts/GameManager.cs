@@ -89,8 +89,7 @@ public class GameManager : MonoBehaviour
         isStopped = true;
         foreach (var enemy in enemies)
         {
-            enemy.GetComponent<Enemy>().speed = 0;
-            enemy.GetComponent<Enemy>().canShoot = false;
+            enemy.GetComponent<Enemy>().StopTank();
         }
         yield return new WaitForSeconds(15f);
 
@@ -98,8 +97,7 @@ public class GameManager : MonoBehaviour
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
         {
-            enemy.GetComponent<Enemy>().speed = 5;
-            enemy.GetComponent<Enemy>().canShoot = true;
+            enemy.GetComponent<Enemy>().StartTank();
         }
     }
     private void PlayerController_playerDestroyed(object sender, GameObject e)

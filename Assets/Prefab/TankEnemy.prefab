@@ -283,7 +283,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 435caafc3ab18874f88497424043c127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 1
   speed: 4
+  maxSpeed: 5
   obstacleMask:
     serializedVersion: 2
     m_Bits: 80
@@ -294,6 +296,7 @@ MonoBehaviour:
   bulletTransform: {fileID: 7560245323438651938}
   canShoot: 1
   enemyRigidbody: {fileID: 0}
+  maxTime: 1.75
 --- !u!1 &7560245323192709555
 GameObject:
   m_ObjectHideFlags: 0
@@ -5591,3 +5594,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4de9f6df017b2b74883c76cdc39f0685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleSystem: {fileID: 0}

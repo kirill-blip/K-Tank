@@ -2,7 +2,9 @@
 using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageable
 {
+    public int health = 1;
     public float speed = 5;
+    public float maxSpeed = 5;
     public LayerMask obstacleMask;
     public LayerMask enemyMask;
     private Vector3[] rotations = { new Vector3(0, 0, 0), new Vector3(0, 0, 90), new Vector3(0, 0, -90), new Vector3(0, 0, 180) };
@@ -18,7 +20,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private new ParticleSystem particleSystem;
     public event EventHandler<GameObject> enemyDestroyed;
     public Rigidbody2D enemyRigidbody;
-    
+
     private void Start()
     {
         enemyRigidbody = GetComponent<Rigidbody2D>();
@@ -31,11 +33,11 @@ public class Enemy : MonoBehaviour, IDamageable
         currentRotation = rotations[index];
         transform.eulerAngles = currentRotation;
     }
-    
+
     int index;
     float currentTime = 0;
-    float maxTime = 2f;
-    
+    public float maxTime = 2f;
+
     private void Update()
     {
         if (!Physics2D.Raycast(transform.position, currentDir, 1, obstacleMask))
@@ -63,7 +65,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         GameObject go = Instantiate(bulletPrefab, bulletTransform.position, bulletTransform.rotation);
     }
-    
+
     void RandomRotateEnemy()
     {
         index = UnityEngine.Random.Range(0, rotations.Length);
@@ -74,15 +76,31 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public virtual void Damage(int damage, Vector3 rotationOfBullet)
     {
-        particleSystem.transform.parent = null;
-        particleSystem.Play();
-        particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
-        enemyDestroyed?.Invoke(this, gameObject);
-        Destroy(gameObject);
+        health--;
+        if (health <= 0)
+        {
+            particleSystem.transform.parent = null;
+            particleSystem.Play();
+            particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
+            enemyDestroyed?.Invoke(this, gameObject);
+            Destroy(gameObject);
+        }
     }
 
     public virtual void DestroyTank()
     {
         Destroy(gameObject);
+    }
+
+    public virtual void StopTank()
+    {
+        speed = 0;
+        canShoot = false;
+    }
+
+    public virtual void StartTank()
+    {
+        speed = maxSpeed;
+        canShoot = true;
     }
 }

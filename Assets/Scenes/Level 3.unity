@@ -226,6 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &18238434
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1377,6 +1378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &113121402
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1744,6 +1746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &144977414
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1867,6 +1870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &147593690
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2533,6 +2537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &219838744
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2860,6 +2865,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &269273942
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5007,6 +5013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &541016322
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5130,6 +5137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &546406349
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5763,6 +5771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &585552393
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6689,6 +6698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &710702438
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7256,6 +7266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &777598203
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7982,6 +7993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &858319082
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8227,6 +8239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &879322717
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8856,6 +8869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1011936210
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11141,6 +11155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1271097989
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11295,6 +11310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1281694805
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12163,6 +12179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1382534213
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12331,13 +12348,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesPrefabs:
-  - {fileID: 7560245323059677691, guid: f8325492b800a4344868d788f97e311f, type: 3}
   - {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  - {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  - {fileID: 7560245323059677691, guid: 7b3d0c10d5421d24bb162a2312563837, type: 3}
+  - {fileID: 7442576318195819505, guid: 111ccf7a134fc784fb355eed37eea161, type: 3}
+  - {fileID: 7560245323059677691, guid: f8325492b800a4344868d788f97e311f, type: 3}
+  - {fileID: 5159805113276211883, guid: b798ec8502399cc48b07d0d780bd8312, type: 3}
   spawnTransforms:
   - {fileID: 1680936682}
   - {fileID: 392986588}
   - {fileID: 6134363}
   needToKill: 25
+  enemyOnScene: 4
   spawnTime: 3
   spawnRigidbodies:
   - {fileID: 376700064}
@@ -12763,6 +12785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1478176891
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12886,6 +12909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1485296155
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13225,6 +13249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1508175153
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13410,6 +13435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1534221731
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13533,6 +13559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1542507054
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13656,6 +13683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1543646072
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14153,6 +14181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1623767458
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14276,6 +14305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1627802270
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14555,6 +14585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1661427857
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15830,6 +15861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1790783240
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17081,6 +17113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1892087140
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17348,6 +17381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1990695990
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17533,6 +17567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &1999913278
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17656,6 +17691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &2005061127
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17779,6 +17815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &2008229227
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -18652,6 +18689,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &137524900681734622
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -18749,6 +18787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &137524901990559745
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -18931,6 +18970,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &2272103554351478598
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -19087,6 +19127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!212 &2272103555727400601
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -19202,6 +19243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!61 &8986600129893378032
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19358,6 +19400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   briks: []
+  isWallIron: 0
 --- !u!61 &8986600131336539699
 BoxCollider2D:
   m_ObjectHideFlags: 0
