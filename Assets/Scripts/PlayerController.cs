@@ -30,37 +30,40 @@ public class PlayerController : MonoBehaviour, IDamageable
     public bool hasShield = false;
     public bool canDestroyBush;
     public bool canMoveOnWater;
+    public bool canDestroyIron;
 
     private GameObject bullet;
     public event EventHandler<GameObject> playerDestroyed;
 
-    public new ParticleSystem particleSystem;
+    public ParticleSystem playerParticleSystem;
 
     // Start is called before the first frame update
     void Start()
     {
-        particleSystem.gameObject.SetActive(true);
+        playerParticleSystem.gameObject.SetActive(true);
         boatGO.SetActive(false);
         movePoint.parent = null;
-        particleSystem = GetComponentInChildren<ParticleSystem>();
+        playerParticleSystem = GetComponentInChildren<ParticleSystem>();
         if (PlayerPrefs.GetInt("HaveBoat") == 1)
         {
             canMoveOnWater = true;
             boatGO.SetActive(true);
         }
         if (PlayerPrefs.GetInt("TurboShooting") == 1)
-        {
             turboShooting = true;
-        }
         if (PlayerPrefs.GetInt("CanDestroyBush") == 1)
-        {
             canDestroyBush = true;
-        }
     }
     // Update is called once per frame
     void Update()
     {
         // Movement
+        Move();
+        // Shooting
+        Shoot();
+    }
+    void Move()
+    {
         if (canMove)
         {
             transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
@@ -99,11 +102,7 @@ public class PlayerController : MonoBehaviour, IDamageable
                 }
             }
         }
-
-        // Shooting
-        Shoot();
     }
-
     bool CanMove(Vector3 point)
     {
         if (canMoveOnWater)
@@ -125,25 +124,22 @@ public class PlayerController : MonoBehaviour, IDamageable
             if (Input.GetKey(KeyCode.E) && currentShootingTime >= maxShootingTime)
             {
                 GameObject tempBullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
-                tempBullet.GetComponent<BulletScript>().canDestroyBush = canDestroyBush;
+                BulletScript tempBulletScript = tempBullet.GetComponent<BulletScript>();
+                tempBulletScript.canDestroyBush = canDestroyBush;
+                tempBulletScript.canDestroyIron = canDestroyIron;
                 currentShootingTime = 0;
             }
         }
     }
-    
-    public void Damage(int damage, Vector3 rotationOfBullet)
+    public void Damage(int damage, Vector3 rotationOfBullet, bool ironCanDestroy)
     {
         if (hasShield) return;
         health--;
         canMove = false;
-        particleSystem.Play();
+        playerParticleSystem.Play();
         GetComponent<Collider2D>().enabled = false;
         playerDestroyed?.Invoke(this, gameObject);
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    { }
-
     public int GetHealth()
     {
         return health;

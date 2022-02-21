@@ -22,7 +22,7 @@ public class HomeScript : MonoBehaviour, IDamageable
     void Update()
     { }
 
-    public void Damage(int damage, Vector3 rotationOfBullet)
+    public void Damage(int damage, Vector3 rotationOfBullet, bool ironCanDestroy)
     {
         homeDestroyed?.Invoke(this, this.gameObject);
     }

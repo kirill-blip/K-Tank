@@ -41,38 +41,55 @@ public class GameManager : MonoBehaviour
     }
     public void GameManager_onBonus(object sender, BonusType type)
     {
-        switch (type)
+        string whoIsIt = (sender as GameObject).tag;
+        if (whoIsIt == "Player")
         {
-            case BonusType.shootingTime:
-                playerController.turboShooting = true;
-                //StartCoroutine(ChangeShootingTime());
-                break;
-            case BonusType.stopTimeForEnemy:
-                StartCoroutine(StoppingEnemy());
-                break;
-            case BonusType.bomb:
-                var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-                foreach (var enemy in enemies)
-                {
-                    enemy.GetComponent<Enemy>().DestroyTank();
-                    Debug.Log("Enemy destoy");
-                }
-                break;
-            case BonusType.boat:
-                playerController.boatGO.SetActive(true);
-                playerController.canMoveOnWater = true;
-                break;
-            case BonusType.shield:
-                StartCoroutine(SetActiveShield());
-                break;
-            case BonusType.destroyBush:
-                playerController.canDestroyBush = true;
-                break;
-            case BonusType.ironBonus:
-                baseGO.GetComponent<HomeScript>().ChangeWall();
-                break;
-            default:
-                break;
+            switch (type)
+            {
+                case BonusType.shootingTime:
+                    if (playerController.turboShooting == true)
+                    {
+                        playerController.canDestroyIron = true;
+                    }
+                    else
+                    {
+                        playerController.turboShooting = true;
+                    }
+                    break;
+                case BonusType.stopTimeForEnemy:
+                    StartCoroutine(StoppingEnemy());
+                    break;
+                case BonusType.bomb:
+                    var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                    foreach (var enemy in enemies)
+                    {
+                        enemy.GetComponent<Enemy>().DestroyTank();
+                        Debug.Log("Enemy destoy");
+                    }
+                    break;
+                case BonusType.boat:
+                    playerController.boatGO.SetActive(true);
+                    playerController.canMoveOnWater = true;
+                    break;
+                case BonusType.shield:
+                    StartCoroutine(SetActiveShield());
+                    break;
+                case BonusType.destroyBush:
+                    playerController.canDestroyBush = true;
+                    break;
+                case BonusType.ironBonus:
+                    baseGO.GetComponent<HomeScript>().ChangeWall();
+                    break;
+            }
+        }
+        else if (whoIsIt == "Enemy")
+        {
+            switch (type)
+            {
+                case BonusType.bomb:
+                    playerController.Damage(1, Vector3.zero, false);
+                    break;
+            }
         }
     }
     IEnumerator SetActiveShield()
@@ -116,7 +133,7 @@ public class GameManager : MonoBehaviour
         playerPointRigid.AddTorque(200f);
         yield return new WaitForSeconds(.5f);
 
-        playerController.particleSystem.Stop();
+        playerController.playerParticleSystem.Stop();
         playerController.gameObject.SetActive(false);
         playerController.transform.position = playerPoint.position;
         playerController.movePoint.position = playerPoint.position;

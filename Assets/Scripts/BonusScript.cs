@@ -27,16 +27,16 @@ public class BonusScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
-        {
-            onBonus?.Invoke(this, type);
-            Destroy(gameObject);
-        }
-        if (collision.gameObject.CompareTag("Obstacles"))
-        {
-            transform.position = new Vector2(UnityEngine.Random.Range(-17, 12), UnityEngine.Random.Range(-23, -2));
-        }
+            DestoyBonus(collision);
+        if (collision.gameObject.CompareTag("Enemy") && type == BonusType.bomb)
+            DestoyBonus(collision);
     }
 
+    void DestoyBonus(Collider2D collision)
+    {
+        onBonus?.Invoke(collision.gameObject, type);
+        Destroy(gameObject);
+    }
     IEnumerator DeleteBonus()
     {
         yield return new WaitForSeconds(20f);

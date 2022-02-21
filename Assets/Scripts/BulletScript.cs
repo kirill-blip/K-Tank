@@ -6,13 +6,15 @@ public class BulletScript : MonoBehaviour
     public int damage;
     public bool canDestroyBush = false;
 
-    public new ParticleSystem particleSystem;
+    public ParticleSystem bulletParticleSystem;
 
     // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
+
+    internal bool canDestroyIron;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -24,20 +26,45 @@ public class BulletScript : MonoBehaviour
         }
         else if (canDestroyBush && collision.gameObject.tag == "Bush")
         {
-            collision.GetComponent<IDamageable>().Damage(damage, transform.localEulerAngles);
+            collision.GetComponent<IDamageable>().Damage(damage, transform.localEulerAngles, canDestroyIron);
             return;
         }
 
-        particleSystem.Play();
-        particleSystem.transform.parent = null;
-        particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
+        if (collision.gameObject.tag == "Obstacles")
+        {
+            var script = collision.GetComponent<WallScript>();
+            if (script == null)
+            {
+                PlayParticles();
+                Destroy(gameObject);
+                return;
+            }
+            else if (script.isWallIron && canDestroyIron)
+            {
+                var damageablesBrick = collision.GetComponentsInChildren<IDamageable>();
+                foreach (var damageable in damageablesBrick)
+                {
+                    damageable.Damage(damage, transform.localEulerAngles, canDestroyIron);
+                }
+                Destroy(gameObject);
+                return;
+            }
+        }
 
+        PlayParticles();
         var damageables = collision.GetComponentsInChildren<IDamageable>();
         foreach (var damageable in damageables)
         {
-            damageable.Damage(damage, transform.localEulerAngles);
+            damageable.Damage(damage, transform.localEulerAngles, canDestroyIron);
         }
 
         Destroy(gameObject);
+    }
+    void PlayParticles()
+    {
+        bulletParticleSystem.Play();
+        bulletParticleSystem.transform.parent = null;
+        bulletParticleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
+
     }
 }

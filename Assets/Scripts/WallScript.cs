@@ -10,9 +10,9 @@ public class WallScript : MonoBehaviour, IDamageable
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Damage(int damage, Vector3 rotationOfBullet)
+    public void Damage(int damage, Vector3 rotationOfBullet, bool ironCanDestroy)
     {
-        if (isWallIron) return;
+        if (isWallIron && ironCanDestroy == false) return;
         //Vector3 rotation = collision2D.gameObject.transform.localEulerAngles;
         if (rotationOfBullet == new Vector3(0, 0, 180) || rotationOfBullet == new Vector3(0, 0, 0))
         {

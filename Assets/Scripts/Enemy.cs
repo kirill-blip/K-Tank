@@ -14,17 +14,17 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public GameObject bulletPrefab;
     public Transform bulletTransform;
-
+    public float distance = 1;
     public bool canShoot;
 
-    private new ParticleSystem particleSystem;
+    public ParticleSystem enemyParticleSystem;
     public event EventHandler<GameObject> enemyDestroyed;
     public Rigidbody2D enemyRigidbody;
 
-    private void Start()
+    protected virtual void Start()
     {
         enemyRigidbody = GetComponent<Rigidbody2D>();
-        particleSystem = GetComponentInChildren<ParticleSystem>();
+        //enemyParticleSystem = GetComponentInChildren<ParticleSystem>();
         currentRotation = rotations[3];
         currentDir = dir[3];
 
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        if (!Physics2D.Raycast(transform.position, currentDir, 1, obstacleMask))
+        if (!Physics2D.Raycast(transform.position, currentDir, distance, obstacleMask))
         {
             transform.Translate(Vector2.up * speed * Time.deltaTime);
         }
@@ -74,14 +74,14 @@ public class Enemy : MonoBehaviour, IDamageable
         transform.eulerAngles = currentRotation;
     }
 
-    public virtual void Damage(int damage, Vector3 rotationOfBullet)
+    public virtual void Damage(int damage, Vector3 rotationOfBullet, bool ironCanDestroy)
     {
         health--;
         if (health <= 0)
         {
-            particleSystem.transform.parent = null;
-            particleSystem.Play();
-            particleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
+            enemyParticleSystem.transform.parent = null;
+            enemyParticleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
+            enemyParticleSystem.Play();
             enemyDestroyed?.Invoke(this, gameObject);
             Destroy(gameObject);
         }

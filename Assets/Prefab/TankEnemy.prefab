@@ -294,7 +294,9 @@ MonoBehaviour:
     m_Bits: 128
   bulletPrefab: {fileID: 1642375522471859995, guid: a02b1475084d9e44db8fee20cd02bd50, type: 3}
   bulletTransform: {fileID: 7560245323438651938}
+  distance: 1
   canShoot: 1
+  enemyParticleSystem: {fileID: 3725698443337314512}
   enemyRigidbody: {fileID: 0}
   maxTime: 1.75
 --- !u!1 &7560245323192709555
@@ -5594,4 +5596,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4de9f6df017b2b74883c76cdc39f0685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystem: {fileID: 0}
