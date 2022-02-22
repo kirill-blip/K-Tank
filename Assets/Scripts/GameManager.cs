@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public Rigidbody2D playerPointRigid;
     private EnemySpawnManager enemySpawnManager;
     private PlayerController playerController;
-
     private void Start()
     {
         playerPointRigid = playerPoint.GetComponentInChildren<Rigidbody2D>();

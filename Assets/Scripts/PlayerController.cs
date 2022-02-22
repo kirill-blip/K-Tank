@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
+    public AudioClip shootingClip;
+    public AudioClip destoyingClip;
+    public AudioManager audioManager;
+    
     public GameObject boatGO;
     public GameObject shieldGO;
 
@@ -115,6 +119,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         currentShootingTime += Time.deltaTime;
         if (bullet == null && Input.GetButton("Jump") && currentShootingTime >= .25f)
         {
+            audioManager.PlaySound(SoundName.PlayerShooting);
             currentShootingTime = 0;
             bullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
             bullet.GetComponent<BulletScript>().canDestroyBush = canDestroyBush;
@@ -123,6 +128,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             if (Input.GetKey(KeyCode.E) && currentShootingTime >= maxShootingTime)
             {
+                audioManager.PlaySound(SoundName.PlayerShooting);
                 GameObject tempBullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
                 BulletScript tempBulletScript = tempBullet.GetComponent<BulletScript>();
                 tempBulletScript.canDestroyBush = canDestroyBush;
@@ -134,6 +140,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void Damage(int damage, Vector3 rotationOfBullet, bool ironCanDestroy)
     {
         if (hasShield) return;
+        audioManager.PlaySound(SoundName.DestroyingPlayer);
         health--;
         canMove = false;
         playerParticleSystem.Play();

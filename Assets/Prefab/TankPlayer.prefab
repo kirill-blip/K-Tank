@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4de9f6df017b2b74883c76cdc39f0685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystem: {fileID: 0}
 --- !u!198 &198559267
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5668,6 +5667,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5fdc629a778df40ad63077aebc7f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shootingClip: {fileID: 8300000, guid: c69d02908bc707946bd1b5739012bd5d, type: 3}
+  destoyingClip: {fileID: 8300000, guid: 4a4a097356653c643b73f03124a95fe2, type: 3}
+  audioManager: {fileID: 0}
   boatGO: {fileID: 2001379619}
   shieldGO: {fileID: 1426944911}
   health: 3
@@ -5691,7 +5693,8 @@ MonoBehaviour:
   hasShield: 0
   canDestroyBush: 0
   canMoveOnWater: 0
-  particleSystem: {fileID: 198559267}
+  canDestroyIron: 0
+  playerParticleSystem: {fileID: 198559267}
 --- !u!50 &8106859789180283071
 Rigidbody2D:
   serializedVersion: 4

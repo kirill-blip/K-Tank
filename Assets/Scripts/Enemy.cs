@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour, IDamageable
     private Vector2[] dir = { Vector2.up, Vector2.left, Vector2.right, Vector2.down };
     private Vector2 currentDir;
     private Vector3 currentRotation;
+    public AudioClip destroyingClip;
+    private AudioManager audioManager;
 
     public GameObject bulletPrefab;
     public Transform bulletTransform;
@@ -23,6 +25,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected virtual void Start()
     {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         enemyRigidbody = GetComponent<Rigidbody2D>();
         //enemyParticleSystem = GetComponentInChildren<ParticleSystem>();
         currentRotation = rotations[3];
@@ -83,6 +86,7 @@ public class Enemy : MonoBehaviour, IDamageable
             enemyParticleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
             enemyParticleSystem.Play();
             enemyDestroyed?.Invoke(this, gameObject);
+            audioManager.PlaySound(SoundName.DestroyingEnemy);
             Destroy(gameObject);
         }
     }

@@ -292,6 +292,7 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 128
+  destroyingClip: {fileID: 8300000, guid: 04588b68543c5ae4dbd01f79bb01e5e9, type: 3}
   bulletPrefab: {fileID: 1642375522471859995, guid: a02b1475084d9e44db8fee20cd02bd50, type: 3}
   bulletTransform: {fileID: 7560245323438651938}
   distance: 1
