@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         baseGO = GameObject.Find("Base").GetComponent<HomeScript>();
         baseGO.homeDestroyed += GameManager_baseDestroyed;
         healthText.text = "Health: " + playerController.GetHealth();
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 0 && SceneManager.GetActiveScene().buildIndex == 1)
         {
             PlayerPrefs.DeleteKey("HaveBoat");
             PlayerPrefs.DeleteKey("TurboShooting");
