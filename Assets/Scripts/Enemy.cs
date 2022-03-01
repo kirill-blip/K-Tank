@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public event EventHandler<GameObject> enemyDestroyed;
     public Rigidbody2D enemyRigidbody;
 
+
     protected virtual void Start()
     {
         audioManager = GameObject.FindObjectOfType<AudioManager>();
@@ -52,10 +53,11 @@ public class Enemy : MonoBehaviour, IDamageable
             RandomRotateEnemy();
         }
 
-        if (Physics2D.Raycast(bulletTransform.transform.position, currentDir, 2, enemyMask))
+        if (Physics2D.Raycast(bulletTransform.position, currentDir, 2, enemyMask))
         {
             RandomRotateEnemy();
         }
+
         currentTime += Time.deltaTime;
         if (currentTime >= maxTime && canShoot == true)
         {
@@ -63,7 +65,6 @@ public class Enemy : MonoBehaviour, IDamageable
             currentTime = 0;
         }
     }
-
     void Shoot()
     {
         GameObject go = Instantiate(bulletPrefab, bulletTransform.position, bulletTransform.rotation);

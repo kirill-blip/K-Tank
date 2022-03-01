@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public bool canDestroyIron;
 
     private GameObject bullet;
+    private Animator playerAnimator;
     public event EventHandler<GameObject> playerDestroyed;
 
     public ParticleSystem playerParticleSystem;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     void Start()
     {
+        playerAnimator = GetComponent<Animator>();
         playerParticleSystem.gameObject.SetActive(true);
         boatGO.SetActive(false);
         movePoint.parent = null;
@@ -71,6 +73,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (canMove)
         {
             transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
+            playerAnimator.Play("PlayerMovement");
 
             if (Vector3.Distance(transform.position, movePoint.position) == stopDistance)
             {

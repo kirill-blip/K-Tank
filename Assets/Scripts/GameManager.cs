@@ -16,22 +16,18 @@ public class GameManager : MonoBehaviour
     private PlayerController playerController;
     private void Start()
     {
-        playerPointRigid = playerPoint.GetComponentInChildren<Rigidbody2D>();
-        playerPointRigid.gameObject.SetActive(false);
 
         enemySpawnManager = GetComponent<EnemySpawnManager>();
         enemySpawnManager.spawnFinished += UpdateCountOfEnemies;
+
+        playerPointRigid = playerPoint.GetComponentInChildren<Rigidbody2D>();
+        playerPointRigid.gameObject.SetActive(false);
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         playerController.playerDestroyed += PlayerController_playerDestroyed;
+        healthText.text = "Health: " + playerController.GetHealth();
+
         baseGO = GameObject.Find("Base").GetComponent<HomeScript>();
         baseGO.homeDestroyed += GameManager_baseDestroyed;
-        healthText.text = "Health: " + playerController.GetHealth();
-        if (SceneManager.GetActiveScene().buildIndex == 0 && SceneManager.GetActiveScene().buildIndex == 1)
-        {
-            PlayerPrefs.DeleteKey("HaveBoat");
-            PlayerPrefs.DeleteKey("TurboShooting");
-            PlayerPrefs.DeleteKey("CanDestroyBush");
-        }
     }
 
     private void UpdateCountOfEnemies(object sender, int e)

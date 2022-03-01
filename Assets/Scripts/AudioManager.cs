@@ -26,7 +26,8 @@ public enum SoundName
     DestroyingPlayer,
     DestroyingEnemy,
     DestroyingBullet,
-    PlayerShooting
+    PlayerShooting,
+    Clicking
 }
 
 public class AudioManager : MonoBehaviour
@@ -51,7 +52,7 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!mainAudioSource.isPlaying && canPlay)
+        if (!mainAudioSource.isPlaying && canPlay && mainAudioSource != null)
             StartCoroutine(PlayBackgroundMusic());
     }
 
