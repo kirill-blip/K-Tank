@@ -6,29 +6,31 @@ public class EnemySpawnManager : MonoBehaviour
 {
     public List<GameObject> enemiesPrefabs;
     public List<Transform> spawnTransforms;
-    public int needToKill;
-    public int enemyOnScene = 4;
+    public List<Rigidbody2D> spawnRigidbodies;
 
+    public int needToKill;
     public float spawnTime;
     public event EventHandler<int> spawnFinished;
-    public List<Rigidbody2D> spawnRigidbodies;
+
+    private int currentEnemyOnScene;
+    private const int enemyOnScene = 4;
+
     private GameManager gameManager;
 
     private void Awake()
     {
         gameManager = Camera.main.GetComponent<GameManager>();
-
         StartCoroutine(WaitForSpawnEnemy());
     }
-
-    void Update()
-    {
-    }
-
-    IEnumerator WaitForSpawnEnemy()
+    private IEnumerator WaitForSpawnEnemy()
     {
         while (needToKill > 0)
         {
+            if(currentEnemyOnScene == enemyOnScene)
+            {
+                yield return new WaitForSeconds(spawnTime);
+                continue;
+            }
             int prefabIndex = UnityEngine.Random.Range(0, enemiesPrefabs.Count);
             int spawnIndex = UnityEngine.Random.Range(0, spawnTransforms.Count);
 
@@ -38,22 +40,28 @@ public class EnemySpawnManager : MonoBehaviour
             spawnVisualition.gameObject.SetActive(true);
             spawnVisualition.AddTorque(200f);
             spawnFinished?.Invoke(this, needToKill);
+            currentEnemyOnScene++;
 
             yield return new WaitForSeconds(1.5f);
             spawnVisualition.gameObject.SetActive(false);
-            GameObject enemy = Instantiate(enemiesPrefabs[prefabIndex], spawnPosition.position, spawnPosition.rotation);
+            GameObject enemyGO = Instantiate(enemiesPrefabs[prefabIndex], spawnPosition.position, spawnPosition.rotation);
+            Enemy enemyScipt = enemyGO.GetComponent<Enemy>();
+            enemyScipt.enemyDestroyed += EnemySpawnManager_enemyDestroyed;
+            enemyScipt.DefaultRotationAndPosition();
 
-            // Think about this duplicate.
             if (gameManager.isStopped)
-                enemy.GetComponent<Enemy>().StopTank();
+                enemyScipt.StopTank();
             else
-                enemy.GetComponent<Enemy>().StartTank();
+                enemyScipt.StartTank();
 
             needToKill--;
             yield return new WaitForSeconds(spawnTime);
         }
     }
-
+    private void EnemySpawnManager_enemyDestroyed(object sender, GameObject e)
+    {
+        currentEnemyOnScene--;
+    }
     public int GetCountEnemiesToSpawn()
     {
         return needToKill;

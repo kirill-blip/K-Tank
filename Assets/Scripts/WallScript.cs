@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class WallScript : MonoBehaviour, IDamageable
 {
-    public GameObject[] briks;
     public bool isWallIron;
     private SpriteRenderer spriteRenderer;
     private void Start()
@@ -36,10 +35,5 @@ public class WallScript : MonoBehaviour, IDamageable
             if (rotationOfBullet == new Vector3(0, 0, 90))
                 transform.position -= new Vector3(0.125f, 0, 0);
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("It's trigger");
     }
 }

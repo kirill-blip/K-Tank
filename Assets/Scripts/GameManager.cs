@@ -14,8 +14,10 @@ public class GameManager : MonoBehaviour
     public Rigidbody2D playerPointRigid;
     private EnemySpawnManager enemySpawnManager;
     private PlayerController playerController;
+    private DataManager dataManager;
     private void Start()
     {
+        dataManager = GameObject.FindObjectOfType<DataManager>();
 
         enemySpawnManager = GetComponent<EnemySpawnManager>();
         enemySpawnManager.spawnFinished += UpdateCountOfEnemies;
@@ -29,88 +31,9 @@ public class GameManager : MonoBehaviour
         baseGO = GameObject.Find("Base").GetComponent<HomeScript>();
         baseGO.homeDestroyed += GameManager_baseDestroyed;
     }
-
     private void UpdateCountOfEnemies(object sender, int e)
     {
         countOfEnemiesText.text = "Count of enemies: " + e;
-    }
-    public void GameManager_onBonus(object sender, BonusType type)
-    {
-        string whoIsIt = (sender as GameObject).tag;
-        if (whoIsIt == "Player")
-        {
-            switch (type)
-            {
-                case BonusType.shootingTime:
-                    if (playerController.turboShooting == true)
-                    {
-                        playerController.canDestroyIron = true;
-                    }
-                    else
-                    {
-                        playerController.turboShooting = true;
-                    }
-                    break;
-                case BonusType.stopTimeForEnemy:
-                    StartCoroutine(StoppingEnemy());
-                    break;
-                case BonusType.bomb:
-                    var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-                    foreach (var enemy in enemies)
-                    {
-                        enemy.GetComponent<Enemy>().DestroyTank();
-                        Debug.Log("Enemy destoy");
-                    }
-                    break;
-                case BonusType.boat:
-                    playerController.boatGO.SetActive(true);
-                    playerController.canMoveOnWater = true;
-                    break;
-                case BonusType.shield:
-                    StartCoroutine(SetActiveShield());
-                    break;
-                case BonusType.destroyBush:
-                    playerController.canDestroyBush = true;
-                    break;
-                case BonusType.ironBonus:
-                    baseGO.GetComponent<HomeScript>().ChangeWall();
-                    break;
-            }
-        }
-        else if (whoIsIt == "Enemy")
-        {
-            switch (type)
-            {
-                case BonusType.bomb:
-                    playerController.Damage(1, Vector3.zero, false);
-                    break;
-            }
-        }
-    }
-    IEnumerator SetActiveShield()
-    {
-        playerController.hasShield = true;
-        playerController.shieldGO.gameObject.SetActive(true);
-        yield return new WaitForSeconds(10f);
-        playerController.hasShield = false;
-        playerController.shieldGO.gameObject.SetActive(false);
-    }
-    IEnumerator StoppingEnemy()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        isStopped = true;
-        foreach (var enemy in enemies)
-        {
-            enemy.GetComponent<Enemy>().StopTank();
-        }
-        yield return new WaitForSeconds(15f);
-
-        isStopped = false;
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (var enemy in enemies)
-        {
-            enemy.GetComponent<Enemy>().StartTank();
-        }
     }
     private void PlayerController_playerDestroyed(object sender, GameObject e)
     {
@@ -122,7 +45,114 @@ public class GameManager : MonoBehaviour
         healthText.text = "Health: " + playerController.GetHealth();
         StartCoroutine(SetActivePlayer());
     }
-    IEnumerator SetActivePlayer()
+    IEnumerator LoadSceneInTime(int id, float time)
+    {
+        if (id != 0)
+        {
+            dataManager.SavePlayerData(playerController);
+        }
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(id);
+    }
+    private void GameManager_baseDestroyed(object sender, GameObject baseGO)
+    {
+        Destroy(baseGO);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    private void Update()
+    {
+        int countEnemiesOnScene = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        if (enemySpawnManager.GetCountEnemiesToSpawn() == 0 && countEnemiesOnScene == 0)
+        {
+            StartCoroutine(LoadSceneInTime(levelId, 5f));
+        }
+
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(LoadSceneInTime(4, 5f));
+        }
+#endif
+    }
+    //public void GameManager_onBonus(object sender, BonusType type)
+    //{
+    //    string whoIsIt = (sender as GameObject).tag;
+    //    if (whoIsIt == "Player")
+    //    {
+    //        switch (type)
+    //        {
+    //            case BonusType.shootingTime:
+    //                if (playerController.turboShooting == true)
+    //                {
+    //                    playerController.canDestroyIron = true;
+    //                }
+    //                else
+    //                {
+    //                    playerController.turboShooting = true;
+    //                }
+    //                break;
+    //            case BonusType.stopTimeForEnemy:
+    //                StartCoroutine(StoppingEnemy());
+    //                break;
+    //            case BonusType.bomb:
+    //                var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    //                foreach (var enemy in enemies)
+    //                {
+    //                    enemy.GetComponent<Enemy>().DestroyTank();
+    //                    Debug.Log("Enemy destoy");
+    //                }
+    //                break;
+    //            case BonusType.boat:
+    //                playerController.boatGO.SetActive(true);
+    //                playerController.canMoveOnWater = true;
+    //                break;
+    //            case BonusType.shield:
+    //                StartCoroutine(SetActiveShield());
+    //                break;
+    //            case BonusType.destroyBush:
+    //                playerController.canDestroyBush = true;
+    //                break;
+    //            case BonusType.ironBonus:
+    //                baseGO.GetComponent<HomeScript>().ChangeWall();
+    //                break;
+    //        }
+    //    }
+    //    else if (whoIsIt == "Enemy")
+    //    {
+    //        switch (type)
+    //        {
+    //            case BonusType.bomb:
+    //                playerController.Damage(1, Vector3.zero, false);
+    //                break;
+    //        }
+    //    }
+    //}
+    //IEnumerator SetActiveShield()
+    //{
+    //    playerController.hasShield = true;
+    //    playerController.shieldGO.gameObject.SetActive(true);
+    //    yield return new WaitForSeconds(10f);
+    //    playerController.hasShield = false;
+    //    playerController.shieldGO.gameObject.SetActive(false);
+    //}
+    //IEnumerator StoppingEnemy()
+    //{
+    //    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    //    isStopped = true;
+    //    foreach (var enemy in enemies)
+    //    {
+    //        enemy.GetComponent<Enemy>().StopTank();
+    //    }
+    //    yield return new WaitForSeconds(15f);
+
+    //    isStopped = false;
+    //    enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    //    foreach (var enemy in enemies)
+    //    {
+    //        enemy.GetComponent<Enemy>().StartTank();
+    //    }
+    //}
+    private IEnumerator SetActivePlayer()
     {
         playerPointRigid.gameObject.SetActive(true);
         playerPointRigid.AddTorque(200f);
@@ -138,36 +168,5 @@ public class GameManager : MonoBehaviour
         playerController.gameObject.SetActive(true);
         playerController.canMove = true;
         playerPointRigid.gameObject.SetActive(false);
-    }
-
-    IEnumerator LoadSceneInTime(int id, float time)
-    {
-        if (id != 0)
-        {
-            if (playerController.canMoveOnWater)
-                PlayerPrefs.SetInt("HaveBoat", 1);
-            if (playerController.turboShooting)
-                PlayerPrefs.SetInt("TurboShooting", 1);
-            if (playerController.canDestroyBush)
-                PlayerPrefs.SetInt("CanDestroyBush", 1);
-
-        }
-        yield return new WaitForSeconds(time);
-        SceneManager.LoadScene(id);
-    }
-
-    private void GameManager_baseDestroyed(object sender, GameObject baseGO)
-    {
-        Destroy(baseGO);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    private void Update()
-    {
-        int countEnemiesOnScene = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        if (enemySpawnManager.GetCountEnemiesToSpawn() == 0 && countEnemiesOnScene == 0)
-        {
-            StartCoroutine(LoadSceneInTime(levelId, 5f));
-        }
     }
 }

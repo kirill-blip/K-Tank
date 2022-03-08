@@ -1,19 +1,19 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class BulletScript : MonoBehaviour
 {
     public float speed;
     public int damage;
     public bool canDestroyBush = false;
+    public bool canDestroyIron = false;
     public AudioClip destroyingClip;
-    public ParticleSystem bulletParticleSystem;
 
+    private Particle bulletParticle;
     private AudioManager audioManager;
 
     private void Awake()
     {
+        bulletParticle = GetComponentInChildren<Particle>();
         audioManager = GameObject.FindObjectOfType<AudioManager>();
     }
 
@@ -23,60 +23,60 @@ public class BulletScript : MonoBehaviour
         transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
-    internal bool canDestroyIron;
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.gameObject.tag == "Bonus" || collision.gameObject.CompareTag("Water")) return;
-        if (collision.gameObject.tag == "Bush" && !canDestroyBush)
-        {
-            return;
-        }
-        else if (canDestroyBush && collision.gameObject.tag == "Bush")
-        {
-            collision.GetComponent<IDamageable>().Damage(damage, transform.localEulerAngles, canDestroyIron);
-            return;
-        }
-
+        if (collision.gameObject.tag == "Bush" && !canDestroyBush) return;
+        DestroyBush(collision);
+        DestroyIron(collision);
+        DestroySomething(collision);
+    }
+    private void DestroyIron(Collider2D collision)
+    {
         if (collision.gameObject.tag == "Obstacles")
         {
-            var script = collision.GetComponent<WallScript>();
-            if (script == null)
+            var wallScript = collision.GetComponent<WallScript>();
+            if (wallScript == null)
             {
-                PlayParticles();
-
-                audioManager.PlaySound(SoundName.DestroyingBullet);
-                Destroy(gameObject);
+                DestroyBullet();
                 return;
             }
-            else if (script.isWallIron && canDestroyIron)
+            else if (wallScript.isWallIron && canDestroyIron)
             {
                 var damageablesBrick = collision.GetComponentsInChildren<IDamageable>();
                 foreach (var damageable in damageablesBrick)
                 {
                     damageable.Damage(damage, transform.localEulerAngles, canDestroyIron);
                 }
-                audioManager.PlaySound(SoundName.DestroyingBullet);
-                Destroy(gameObject);
+                DestroyBullet();
                 return;
             }
         }
+    }
+    private void DestroyBush(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Bush" && !canDestroyBush)
+            return;
+        else if (canDestroyBush && collision.gameObject.tag == "Bush")
+            collision.GetComponent<IDamageable>().Damage(damage, transform.localEulerAngles, canDestroyIron);
+            return;
+    }
+    private void DestroySomething(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Bush" && !canDestroyBush) return;
+        if (collision.gameObject.tag == "Bush" && canDestroyBush) return;
 
-        PlayParticles();
         var damageables = collision.GetComponentsInChildren<IDamageable>();
         foreach (var damageable in damageables)
         {
             damageable.Damage(damage, transform.localEulerAngles, canDestroyIron);
         }
-
+        DestroyBullet();
+    }
+    private void DestroyBullet()
+    {
+        bulletParticle.PlayParcile();
         audioManager.PlaySound(SoundName.DestroyingBullet);
         Destroy(gameObject);
-    }
-    void PlayParticles()
-    {
-        bulletParticleSystem.Play();
-        bulletParticleSystem.GetComponent<ParticaleScript>().DestroyParticaleSystem();
-        bulletParticleSystem.transform.parent = null;
     }
 }

@@ -1,64 +1,74 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
+    #region
+    [Header("Clips")]
     public AudioClip shootingClip;
     public AudioClip destoyingClip;
-    public AudioManager audioManager;
-    
-    public GameObject boatGO;
-    public GameObject shieldGO;
 
-    public int health = 3;
-
+    [Space(.25f)]
+    [Header("Shooting variables")]
     public GameObject bulletPrefab;
     public Transform bulletPosition;
+    public float maxShootingTime = .5f;
+    public bool timeOfShootingChanged = false;
 
+    [Space(.25f)]
+    [Header("Moving variables")]
     public Transform movePoint;
     public float speed = 5;
     public float radius;
     public float stopDistance = 0.2f;
-    public LayerMask whatStopsMovement;
-    public LayerMask onlyObstacleMask;
-
     [SerializeField]
     private float distance = .8f;
 
-    public float maxShootingTime = .5f;
-    public bool timeOfShootingChanged = false;
-    private float currentShootingTime;
+    [Space(.25f)]
+    [Header("Layers variables")]
+    public LayerMask whatStopsMovement;
+    public LayerMask onlyObstacleMask;
+    #endregion
+    #region
+    [Space(.25f)]
+    [Header("Bonuses variables")]
+    public GameObject boatGO;
+    public GameObject shieldGO;
 
     public bool canMove = true;
     public bool turboShooting = false;
     public bool hasShield = false;
-    public bool canDestroyBush;
-    public bool canMoveOnWater;
-    public bool canDestroyIron;
+    public bool canDestroyBush = false;
+    public bool canMoveOnWater = false;
+    public bool canDestroyIron = false;
+    #endregion
+    #region
+    private float currentShootingTime;
+    private int health = 3;
 
     private GameObject bullet;
-    private Animator playerAnimator;
-    public event EventHandler<GameObject> playerDestroyed;
 
     public ParticleSystem playerParticleSystem;
+    private Animator playerAnimator;
+    private AudioManager audioManager;
+    private DataManager dataManager;
+    #endregion
+
+    public event EventHandler<GameObject> playerDestroyed;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioManager = GameObject.FindObjectOfType<AudioManager>();
         playerAnimator = GetComponent<Animator>();
-        playerParticleSystem.gameObject.SetActive(true);
         boatGO.SetActive(false);
         movePoint.parent = null;
-        playerParticleSystem = GetComponentInChildren<ParticleSystem>();
-        if (PlayerPrefs.GetInt("HaveBoat") == 1)
-        {
-            canMoveOnWater = true;
-            boatGO.SetActive(true);
-        }
-        if (PlayerPrefs.GetInt("TurboShooting") == 1)
-            turboShooting = true;
-        if (PlayerPrefs.GetInt("CanDestroyBush") == 1)
-            canDestroyBush = true;
+
+        playerParticleSystem.gameObject.SetActive(true);
+
+        dataManager = GameObject.FindObjectOfType<DataManager>();
+        dataManager.LoadPlayerData(this);
     }
     // Update is called once per frame
     void Update()
@@ -110,14 +120,14 @@ public class PlayerController : MonoBehaviour, IDamageable
             }
         }
     }
-    bool CanMove(Vector3 point)
+    private bool CanMove(Vector3 point)
     {
         if (canMoveOnWater)
             return !Physics2D.OverlapCircle(movePoint.position + point, radius, onlyObstacleMask);
         else
             return !Physics2D.OverlapCircle(movePoint.position + point, radius, whatStopsMovement);
     }
-    void Shoot()
+    private void Shoot()
     {
         currentShootingTime += Time.deltaTime;
         if (bullet == null && Input.GetButton("Jump") && currentShootingTime >= .25f)
@@ -126,6 +136,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             currentShootingTime = 0;
             bullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
             bullet.GetComponent<BulletScript>().canDestroyBush = canDestroyBush;
+            bullet.GetComponent<BulletScript>().canDestroyIron = canDestroyIron;
         }
         else if (turboShooting)
         {
@@ -153,5 +164,34 @@ public class PlayerController : MonoBehaviour, IDamageable
     public int GetHealth()
     {
         return health;
+    }
+    public IEnumerator SetActiveShield()
+    {
+        hasShield = true;
+        shieldGO.gameObject.SetActive(true);
+        yield return new WaitForSeconds(10f);
+        hasShield = false;
+        shieldGO.gameObject.SetActive(false);
+    }
+
+    public void ActivateBoat()
+    {
+        boatGO.SetActive(true);
+        canMoveOnWater = true;
+    }
+    public void ShootingBonus()
+    {
+        if (turboShooting == true)
+        {
+            canDestroyIron = true;
+        }
+        else
+        {
+            turboShooting = true;
+        }
+    }
+    public void CanDestroyBush()
+    {
+        canDestroyBush = true;
     }
 }
