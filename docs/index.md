@@ -1,5 +1,16 @@
 ## Welcome to site of K-Tank
 
+## K-Tank version 0.4.0
+[Click to download game](https://kirill-blip.github.io/K-Tank/download/K-Tank_0.4.0.zip)
+
+### What's new
+- Added new levels
+- Added scene after all levels
+- Added sprites for two bonuses
+- Added inscription "Game Over" when player's health is zero
+- Now the game starts from the beginning when the player is killed
+- Enemy movement is now more targeted
+
 ## K-Tank version 0.3.0
 [Click to download game](https://kirill-blip.github.io/K-Tank/download/K-Tank_0.3.0.zip)
 

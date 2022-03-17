@@ -10,7 +10,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     public int needToKill;
     public float spawnTime;
-    public event EventHandler<int> spawnFinished;
+    public event EventHandler<int> countOfEnemiesChanged;
 
     private int currentEnemyOnScene;
     private const int enemyOnScene = 4;
@@ -22,9 +22,13 @@ public class EnemySpawnManager : MonoBehaviour
         gameManager = Camera.main.GetComponent<GameManager>();
         StartCoroutine(WaitForSpawnEnemy());
     }
+    private void EnemySpawnManager_enemyDestroyed(object sender, GameObject e)
+    {
+        currentEnemyOnScene--;
+    }
     private IEnumerator WaitForSpawnEnemy()
     {
-        while (needToKill > 0)
+        while (needToKill >= 0)
         {
             if(currentEnemyOnScene == enemyOnScene)
             {
@@ -39,7 +43,7 @@ public class EnemySpawnManager : MonoBehaviour
 
             spawnVisualition.gameObject.SetActive(true);
             spawnVisualition.AddTorque(200f);
-            spawnFinished?.Invoke(this, needToKill);
+            countOfEnemiesChanged?.Invoke(this, needToKill);
             currentEnemyOnScene++;
 
             yield return new WaitForSeconds(1.5f);
@@ -58,12 +62,12 @@ public class EnemySpawnManager : MonoBehaviour
             yield return new WaitForSeconds(spawnTime);
         }
     }
-    private void EnemySpawnManager_enemyDestroyed(object sender, GameObject e)
-    {
-        currentEnemyOnScene--;
-    }
     public int GetCountEnemiesToSpawn()
     {
         return needToKill;
+    }
+    public int GetCurrentEnemyOnScene()
+    {
+        return currentEnemyOnScene;
     }
 }

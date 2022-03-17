@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
@@ -55,9 +56,17 @@ public class PlayerController : MonoBehaviour, IDamageable
     private DataManager dataManager;
     #endregion
 
-    public event EventHandler<GameObject> playerDestroyed;
+    private PlayerControls controls;
+    private Vector2 move;
 
-    // Start is called before the first frame update
+    public event EventHandler<GameObject> playerDamaged;
+
+    void Awake()
+    {
+        controls = new PlayerControls();
+        controls.Player.Move.performed += context => move = context.ReadValue<Vector2>();
+        controls.Player.Move.canceled += context => move = Vector2.zero;
+    }
     void Start()
     {
         audioManager = GameObject.FindObjectOfType<AudioManager>();
@@ -70,15 +79,24 @@ public class PlayerController : MonoBehaviour, IDamageable
         dataManager = GameObject.FindObjectOfType<DataManager>();
         dataManager.LoadPlayerData(this);
     }
-    // Update is called once per frame
     void Update()
     {
         // Movement
-        Move();
+        MoveInputSystem();
         // Shooting
-        Shoot();
+        currentShootingTime += Time.deltaTime;
+        TurboShoot();
+        DefaultShoot();
     }
-    void Move()
+    private void OnEnable()
+    {
+        controls.Player.Enable();
+    }
+    private void OnDisable()
+    {
+        controls.Player.Disable();
+    }
+    private void MoveInputManager()
     {
         if (canMove)
         {
@@ -120,6 +138,37 @@ public class PlayerController : MonoBehaviour, IDamageable
             }
         }
     }
+    private void MoveInputSystem()
+    {
+        if (canMove)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
+            playerAnimator.Play("PlayerMovement");
+
+            if (Vector3.Distance(transform.position, movePoint.position) == stopDistance)
+            {
+                if (Mathf.Abs(move.x) == 1)
+                {
+                    CheckAndRotatePlayer(Vector2.left, Vector2.right, new Vector3(0f, 0f, 90f), new Vector3(0f, 0f, -90f));
+                    if (CanMove(new Vector3(move.x, 0f, 0f)))
+                        movePoint.position += new Vector3(move.x, 0f, 0f);
+                }
+                else if (Mathf.Abs(move.y) == 1)
+                {
+                    CheckAndRotatePlayer(Vector2.down, Vector2.up, new Vector3(0f, 0f, 180f), Vector3.zero);
+                    if (CanMove(new Vector3(0, move.y, 0f)))
+                        movePoint.position += new Vector3(0f, move.y, 0f);
+                }
+            }
+        }
+    }
+    private void CheckAndRotatePlayer(Vector2 firstDirection, Vector2 secondDirection, Vector3 firstEulerAngels, Vector3 secondEulerAngels)
+    {
+        if (move == firstDirection)
+            transform.eulerAngles = firstEulerAngels;
+        if (move == secondDirection)
+            transform.eulerAngles = secondEulerAngels;
+    }
     private bool CanMove(Vector3 point)
     {
         if (canMoveOnWater)
@@ -127,28 +176,27 @@ public class PlayerController : MonoBehaviour, IDamageable
         else
             return !Physics2D.OverlapCircle(movePoint.position + point, radius, whatStopsMovement);
     }
-    private void Shoot()
+    private void DefaultShoot()
     {
-        currentShootingTime += Time.deltaTime;
-        if (bullet == null && Input.GetButton("Jump") && currentShootingTime >= .25f)
+        if (bullet == null && Input.GetKey(KeyCode.Space) && currentShootingTime >= maxShootingTime)
         {
             audioManager.PlaySound(SoundName.PlayerShooting);
-            currentShootingTime = 0;
             bullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
             bullet.GetComponent<BulletScript>().canDestroyBush = canDestroyBush;
             bullet.GetComponent<BulletScript>().canDestroyIron = canDestroyIron;
+            currentShootingTime = 0;
         }
-        else if (turboShooting)
+    }
+    private void TurboShoot()
+    {
+        if (turboShooting && Input.GetKey(KeyCode.E) && currentShootingTime >= maxShootingTime)
         {
-            if (Input.GetKey(KeyCode.E) && currentShootingTime >= maxShootingTime)
-            {
-                audioManager.PlaySound(SoundName.PlayerShooting);
-                GameObject tempBullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
-                BulletScript tempBulletScript = tempBullet.GetComponent<BulletScript>();
-                tempBulletScript.canDestroyBush = canDestroyBush;
-                tempBulletScript.canDestroyIron = canDestroyIron;
-                currentShootingTime = 0;
-            }
+            audioManager.PlaySound(SoundName.PlayerShooting);
+            GameObject tempBullet = Instantiate(bulletPrefab, bulletPosition.position, bulletPosition.rotation);
+            BulletScript tempBulletScript = tempBullet.GetComponent<BulletScript>();
+            tempBulletScript.canDestroyBush = canDestroyBush;
+            tempBulletScript.canDestroyIron = canDestroyIron;
+            currentShootingTime = 0;
         }
     }
     public void Damage(int damage, Vector3 rotationOfBullet, bool ironCanDestroy)
@@ -159,21 +207,12 @@ public class PlayerController : MonoBehaviour, IDamageable
         canMove = false;
         playerParticleSystem.Play();
         GetComponent<Collider2D>().enabled = false;
-        playerDestroyed?.Invoke(this, gameObject);
+        playerDamaged?.Invoke(this, gameObject);
     }
     public int GetHealth()
     {
         return health;
     }
-    public IEnumerator SetActiveShield()
-    {
-        hasShield = true;
-        shieldGO.gameObject.SetActive(true);
-        yield return new WaitForSeconds(10f);
-        hasShield = false;
-        shieldGO.gameObject.SetActive(false);
-    }
-
     public void ActivateBoat()
     {
         boatGO.SetActive(true);
@@ -193,5 +232,13 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void CanDestroyBush()
     {
         canDestroyBush = true;
+    }
+    public IEnumerator SetActiveShield(float shieldTime)
+    {
+        hasShield = true;
+        shieldGO.gameObject.SetActive(true);
+        yield return new WaitForSeconds(shieldTime);
+        hasShield = false;
+        shieldGO.gameObject.SetActive(false);
     }
 }

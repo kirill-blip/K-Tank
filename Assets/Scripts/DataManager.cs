@@ -2,31 +2,40 @@
 public class DataManager : MonoBehaviour
 {
     public bool deleteData = false;
+
+    private GameManager gameManager;
     private void Awake()
     {
         if (deleteData)
         {
             PlayerPrefs.DeleteAll();
         }
+        try
+        {
+            gameManager = GameObject.FindObjectOfType<GameManager>();
+        }
+        catch
+        {
+            Debug.Log("GameManager doesn't exist");
+        }
     }
 
-    public void SavePlayerData(PlayerController playerController)
+    public void SavePlayerData()
     {
-        if (playerController.canMoveOnWater)
+        if (gameManager.GetPlayerController().canMoveOnWater)
             PlayerPrefs.SetInt("HaveBoat", 1);
-        if (playerController.turboShooting)
+        if (gameManager.GetPlayerController().turboShooting)
             PlayerPrefs.SetInt("TurboShooting", 1);
-        if (playerController.canDestroyBush)
+        if (gameManager.GetPlayerController().canDestroyBush)
             PlayerPrefs.SetInt("CanDestroyBush", 1);
-        if (playerController.canDestroyIron)
+        if (gameManager.GetPlayerController().canDestroyIron)
             PlayerPrefs.SetInt("CanDestroyIron", 1);
     }
     public void LoadPlayerData(PlayerController playerController)
     {
         if (PlayerPrefs.GetInt("HaveBoat") == 1)
         {
-            playerController.canMoveOnWater = true;
-            playerController.boatGO.SetActive(true);
+            playerController.ActivateBoat();
         }
         if (PlayerPrefs.GetInt("TurboShooting") == 1)
         {
@@ -34,7 +43,7 @@ public class DataManager : MonoBehaviour
         }
         if (PlayerPrefs.GetInt("CanDestroyBush") == 1)
         {
-            playerController.canDestroyBush = true;
+            playerController.CanDestroyBush();
         }
         if (PlayerPrefs.GetInt("CanDestroyIron") == 1)
         {

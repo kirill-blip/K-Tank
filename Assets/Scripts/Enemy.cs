@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 public class Enemy : MonoBehaviour, IDamageable
 {
     #region
@@ -44,6 +45,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private Vector3[] rotations = { new Vector3(0, 0, 0), new Vector3(0, 0, 90), new Vector3(0, 0, -90), new Vector3(0, 0, 180) };
     private Vector2[] directions = { Vector2.up, Vector2.left, Vector2.right, Vector2.down };
     private Vector2 currentDirection;
+    private Vector2 previousDirection;
     private Vector3 currentRotation;
 
     private float currentShootTime = 0;
@@ -106,10 +108,32 @@ public class Enemy : MonoBehaviour, IDamageable
         rotateEnemyOnce = false;
         RandomRotateEnemy();
     }
+    private float chance;
     private void RandomRotateEnemy()
     {
-        var index = UnityEngine.Random.Range(0, rotations.Length);
+        int index = Random.Range(0, rotations.Length);
+        chance = Random.value;
+        previousDirection = currentDirection;
+
+        if (Physics2D.Raycast(transform.position, directions[index], 1f, obstacleMask))
+        {
+            RandomRotateEnemy();
+            return;
+        }
+        if (index == 0 && chance <= .85f)
+        {
+            RandomRotateEnemy();
+            return;
+        }
+        chance = Random.value;
+        if (previousDirection == -directions[index] && chance >= .9f)
+        {
+            RandomRotateEnemy();
+            return;
+        }
+
         currentDirection = directions[index];
+        previousDirection = currentDirection;
         currentRotation = rotations[index];
         transform.eulerAngles = currentRotation;
 

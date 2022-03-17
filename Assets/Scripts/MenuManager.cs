@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,34 +11,67 @@ using UnityEditor;
 public class MenuManager : MonoBehaviour
 {
     public GameObject panel;
+    public Text countOfEnemiesText;
+    public Text healthText;
     private AudioManager audioManager;
-    // Start is called before the first frame update
-    void Start()
+    private PlayerController playerController;
+    private EnemySpawnManager enemySpawnManager;
+    private LevelManager levelManager;
+    private void Start()
     {
         audioManager = GameObject.FindObjectOfType<AudioManager>().GetComponent<AudioManager>();
+
+        try
+        {
+            levelManager = GameObject.FindObjectOfType<LevelManager>();
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"LevelManager doesn't exist. {0}");
+            throw;
+        }
+
+        try
+        {
+            enemySpawnManager = GameObject.FindObjectOfType<EnemySpawnManager>().GetComponent<EnemySpawnManager>();
+            enemySpawnManager.countOfEnemiesChanged += UpdateCountOfEnemies;
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"EnemySpawnManager doesn't exist. {e}");
+        }
+
+        try
+        {
+            playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+            playerController.playerDamaged += PlayerController_playerDamaged;
+            healthText.text = "Health: " + playerController.GetHealth();
+        }
+        catch (Exception e)
+        {
+            Debug.Log($"PlayerController doesn't exitst. {e}");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
         if (Input.GetButtonDown("Cancel") && panel != null)
             ActivePanel();
     }
 
-    public void LoadScene(int id)
+    public void ActivePanel()
     {
-        StartCoroutine(WaitForLoadScene(id));
+        panel.SetActive(!panel.activeInHierarchy);
+        Time.timeScale = Time.timeScale == 0 ? 1 : 0;
     }
-    private IEnumerator WaitForLoadScene(int id)
+    private void PlayerController_playerDamaged(object sender, GameObject e)
     {
-        Time.timeScale = 1f;
-        yield return new WaitForSeconds(0.125f);
-        SceneManager.LoadScene(id);
+        healthText.text = "Health: " + playerController.GetHealth();
     }
-    public void ExitGame()
+    private void UpdateCountOfEnemies(object sender, int enemiesCount)
     {
-        Time.timeScale = 1;
-        StartCoroutine(WaitForExitGame());
+        countOfEnemiesText.text = "Count of enemies: " + enemiesCount;
     }
     private IEnumerator WaitForExitGame()
     {
@@ -49,10 +83,15 @@ public class MenuManager : MonoBehaviour
 #endif
     }
 
-    public void ActivePanel()
+    // Methods for UI buttons
+    public void LoadScene(int id)
     {
-        panel.SetActive(!panel.activeInHierarchy);
-        Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        StartCoroutine(levelManager.LoadSceneByButton(id, 0.125f));
+    }
+    public void ExitGame()
+    {
+        Time.timeScale = 1;
+        StartCoroutine(WaitForExitGame());
     }
     public void PlayClickingSound()
     {

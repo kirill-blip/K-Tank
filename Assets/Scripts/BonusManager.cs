@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,32 +21,18 @@ public class BonusManager : MonoBehaviour
     private GameManager gameManager;
     private HomeScript baseGO;
 
-
     public void Awake()
     {
         baseGO = GameObject.FindObjectOfType<HomeScript>();
         gameManager = GameObject.FindObjectOfType<GameManager>();
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
+
     public void InstantiateBonus()
     {
         var bonusTemp = RandomBonus();
         GameObject bonus = Instantiate(bonusTemp, bonusTransforms[Random.Range(0, bonusTransforms.Count)].transform.position, bonusTemp.transform.rotation);
         bonus.GetComponent<Bonus>().onBonus += OnBonus;
-    }
-    private GameObject RandomBonus()
-    {
-        if (GameObject.FindWithTag("Bonus") == null)
-        {
-            int index = Random.Range(0, bonus.Count);
-            return bonus[index];
-        }
-        else
-        {
-            Destroy(GameObject.FindWithTag("Bonus").gameObject);
-            int index = Random.Range(0, bonus.Count);
-            return bonus[index];
-        }
     }
     public void OnBonus(object sender, BonusType type)
     {
@@ -69,7 +54,7 @@ public class BonusManager : MonoBehaviour
                     playerController.ActivateBoat();
                     break;
                 case BonusType.shield:
-                    StartCoroutine(playerController.SetActiveShield());
+                    StartCoroutine(playerController.SetActiveShield(15f));
                     break;
                 case BonusType.destroyBush:
                     playerController.CanDestroyBush();
@@ -89,7 +74,22 @@ public class BonusManager : MonoBehaviour
             }
         }
     }
-    IEnumerator StopEnemy()
+
+    private GameObject RandomBonus()
+    {
+        if (GameObject.FindWithTag("Bonus") == null)
+        {
+            int index = Random.Range(0, bonus.Count);
+            return bonus[index];
+        }
+        else
+        {
+            Destroy(GameObject.FindWithTag("Bonus").gameObject);
+            int index = Random.Range(0, bonus.Count);
+            return bonus[index];
+        }
+    }
+    private IEnumerator StopEnemy()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         gameManager.isStopped = true;
@@ -106,14 +106,13 @@ public class BonusManager : MonoBehaviour
             enemy.GetComponent<Enemy>().StartTank();
         }
     }
-
-    void DestroyEnemies()
+    private void DestroyEnemies()
     {
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
         {
             enemy.GetComponent<Enemy>().DestroyTank();
-            Debug.Log("Enemy destoy");
+            Debug.Log("Enemy destroy");
         }
     }
 }
