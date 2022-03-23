@@ -188,6 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4de9f6df017b2b74883c76cdc39f0685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particle: {fileID: 0}
 --- !u!198 &5042001043459929261
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5145,6 +5146,7 @@ GameObject:
   - component: {fileID: 5042001043712773998}
   - component: {fileID: 5042001043712773997}
   - component: {fileID: 5042001043712773984}
+  - component: {fileID: 5042001043093512298}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -5283,25 +5285,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootingClip: {fileID: 8300000, guid: c69d02908bc707946bd1b5739012bd5d, type: 3}
   destoyingClip: {fileID: 8300000, guid: 4a4a097356653c643b73f03124a95fe2, type: 3}
-  audioManager: {fileID: 0}
-  boatGO: {fileID: 5042001043712064808}
-  shieldGO: {fileID: 5042001042848703356}
-  health: 3
   bulletPrefab: {fileID: 1642375522471859995, guid: ce5bc572f122c4348915584aa6a32ba4, type: 3}
   bulletPosition: {fileID: 5042001043807996130}
+  maxShootingTime: 0.25
+  timeOfShootingChanged: 0
   movePoint: {fileID: 5042001042621439976}
   speed: 5.5
   radius: 0.9
   stopDistance: 0
+  distance: 1
   whatStopsMovement:
     serializedVersion: 2
     m_Bits: 80
   onlyObstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  distance: 1
-  maxShootingTime: 0.25
-  timeOfShootingChanged: 0
+  boatGO: {fileID: 5042001043712064808}
+  shieldGO: {fileID: 5042001042848703356}
   canMove: 1
   turboShooting: 0
   hasShield: 0
@@ -5328,6 +5328,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5042001043093512298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5042001043712773996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: af2a9120f1ccbaa448ed1abd931517c2, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &5042001043807996129
 GameObject:
   m_ObjectHideFlags: 0

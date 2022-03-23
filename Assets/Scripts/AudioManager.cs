@@ -32,7 +32,7 @@ public enum SoundName
 
 public class AudioManager : MonoBehaviour
 {
-    public float timeBetweenBackgroundMusic = 5f;
+    public float timeBetweenBackgroundMusic = 2f;
     public AudioSource mainAudioSource;
     public List<AudioClip> backgroundAudioClips;
 
@@ -47,16 +47,16 @@ public class AudioManager : MonoBehaviour
             sound.source = gameObject.AddComponent<AudioSource>();
             sound.Init();
         }
+        RandomMusic();
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!mainAudioSource.isPlaying && canPlay && mainAudioSource != null)
-            StartCoroutine(PlayBackgroundMusic());
+            StartCoroutine(PlayBackgroundMusicInTime());
     }
-
-    private IEnumerator PlayBackgroundMusic()
+    private IEnumerator PlayBackgroundMusicInTime()
     {
         mainAudioSource.Stop();
         canPlay = false;
@@ -64,11 +64,14 @@ public class AudioManager : MonoBehaviour
         yield return new WaitForSeconds(timeBetweenBackgroundMusic);
 
         canPlay = true;
+        RandomMusic();
+    }
+    private void RandomMusic()
+    {
         var randomClip = backgroundAudioClips[UnityEngine.Random.Range(0, backgroundAudioClips.Count)];
         mainAudioSource.clip = randomClip;
         mainAudioSource.Play();
     }
-
     public void PlaySound(SoundName name)
     {
         Sound sound = Array.Find(sounds, sound => sound.name == name);

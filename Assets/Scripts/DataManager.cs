@@ -22,13 +22,13 @@ public class DataManager : MonoBehaviour
 
     public void SavePlayerData()
     {
-        if (gameManager.GetPlayerController().canMoveOnWater)
+        if (gameManager.GetPlayerController().CanMoveOnWater())
             PlayerPrefs.SetInt("HaveBoat", 1);
-        if (gameManager.GetPlayerController().turboShooting)
+        if (gameManager.GetPlayerController().HaveTurboShooting())
             PlayerPrefs.SetInt("TurboShooting", 1);
-        if (gameManager.GetPlayerController().canDestroyBush)
+        if (gameManager.GetPlayerController().CanDestroyBush())
             PlayerPrefs.SetInt("CanDestroyBush", 1);
-        if (gameManager.GetPlayerController().canDestroyIron)
+        if (gameManager.GetPlayerController().CanDestroyIron())
             PlayerPrefs.SetInt("CanDestroyIron", 1);
     }
     public void LoadPlayerData(PlayerController playerController)
@@ -39,15 +39,15 @@ public class DataManager : MonoBehaviour
         }
         if (PlayerPrefs.GetInt("TurboShooting") == 1)
         {
-            playerController.turboShooting = true;
+            playerController.ShootingBonus();
         }
         if (PlayerPrefs.GetInt("CanDestroyBush") == 1)
         {
-            playerController.CanDestroyBush();
+            playerController.SetActiveDestoyBush();
         }
         if (PlayerPrefs.GetInt("CanDestroyIron") == 1)
         {
-            playerController.canDestroyIron = true;
+            playerController.ShootingBonus();
         }
     }
 }

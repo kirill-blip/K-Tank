@@ -57,7 +57,7 @@ public class BonusManager : MonoBehaviour
                     StartCoroutine(playerController.SetActiveShield(15f));
                     break;
                 case BonusType.destroyBush:
-                    playerController.CanDestroyBush();
+                    playerController.SetActiveDestoyBush();
                     break;
                 case BonusType.ironBonus:
                     baseGO.GetComponent<HomeScript>().ChangeWall();
@@ -69,7 +69,7 @@ public class BonusManager : MonoBehaviour
             switch (type)
             {
                 case BonusType.bomb:
-                    playerController.Damage(1, Vector3.zero, false);
+                    playerController.BombDestroying();
                     break;
             }
         }

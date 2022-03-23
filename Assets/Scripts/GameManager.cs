@@ -16,14 +16,14 @@ public class GameManager : MonoBehaviour
     private EnemySpawnManager enemySpawnManager;
     private PlayerController playerController;
     private DataManager dataManager;
-    private LevelManager levelManager;
+    private LevelLoader levelManager;
 
     public event EventHandler<bool> loadFirstLevel;
 
     private void Start()
     {
         dataManager = GameObject.FindObjectOfType<DataManager>();
-        levelManager = GameObject.FindObjectOfType<LevelManager>();
+        levelManager = GameObject.FindObjectOfType<LevelLoader>();
 
         enemySpawnManager = GetComponent<EnemySpawnManager>();
 
@@ -35,23 +35,6 @@ public class GameManager : MonoBehaviour
 
         baseGO = GameObject.Find("Base").GetComponent<HomeScript>();
         baseGO.homeDestroyed += GameManager_baseDestroyed;
-    }
-    private void Update()
-    {
-        //if (canLoadLevel)
-        //{
-        //    if (Input.anyKey)
-        //        StartCoroutine(levelManager.WaitForLoadScene(1, eSceneType.menuScene));
-        //}
-
-        //if (enemySpawnManager.GetCountEnemiesToSpawn() <= 0 && enemySpawnManager.GetCurrentEnemyOnScene() == 0)
-        //{
-        //    if (levelId != 0)
-        //    {
-        //        dataManager.SavePlayerData(playerController);
-        //    }
-        //    StartCoroutine(levelManager.WaitForLoadScene(5f, eSceneType.levelScene));
-        //}
     }
     private void PlayerController_playerDestroyed(object sender, GameObject e)
     {

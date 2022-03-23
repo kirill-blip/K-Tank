@@ -699,12 +699,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a87a6761f99b051438de5fa7e4725cf7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 87f34dc01b1ea9b4eaefdd783b65a492, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.28, y: 1.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2368,7 +2368,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c54aa28dcada1945a26c6cb44155059, type: 3}
+  m_Script: {fileID: 11500000, guid: a1b3754de454d89419ff71e8707be7f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   loadLevelByAnyKey: 0
@@ -2621,7 +2621,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.28, y: 1.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -8250,7 +8250,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.28, y: 1.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -9586,6 +9586,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5042001043712064808, guid: e40803ad6a685f0468df8d8d4b51ca6f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5042001043712773986, guid: e40803ad6a685f0468df8d8d4b51ca6f, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -9635,50 +9639,15 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5042001043712773997, guid: e40803ad6a685f0468df8d8d4b51ca6f, type: 3}
-      propertyPath: audioManager
-      value: 
-      objectReference: {fileID: 1072835471}
-    - target: {fileID: 5042001043712773997, guid: e40803ad6a685f0468df8d8d4b51ca6f, type: 3}
       propertyPath: turboShooting
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042001043712773997, guid: e40803ad6a685f0468df8d8d4b51ca6f, type: 3}
+      propertyPath: canDestroyIron
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e40803ad6a685f0468df8d8d4b51ca6f, type: 3}
---- !u!1 &5042001043093512297 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5042001043712773996, guid: e40803ad6a685f0468df8d8d4b51ca6f, type: 3}
-  m_PrefabInstance: {fileID: 5042001043093512296}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5042001043093512298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5042001043093512297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: af2a9120f1ccbaa448ed1abd931517c2, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1001 &6387646588490073948
 PrefabInstance:
   m_ObjectHideFlags: 0

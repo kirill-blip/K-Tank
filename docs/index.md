@@ -1,5 +1,19 @@
 ## Welcome to site of K-Tank
 
+## K-Tank version 1.0.0
+Windows:
+[X86](https://kirill-blip.github.io/K-Tank/download/K-Tank_1.0.0_X86.zip)
+[X86_64](https://kirill-blip.github.io/K-Tank/download/K-Tank_1.0.0_X86_64.zip)
+
+## Whats new
+- Added new levels
+- Added icon for game
+- Improved sprites for bonuses, bricks and iron
+- The boat disappears when hit by an enemy bullet
+
+## Fixes
+- Now the levels have different music
+
 ## K-Tank version 0.4.0
 [Click to download game](https://kirill-blip.github.io/K-Tank/download/K-Tank_0.4.0.zip)
 

@@ -38,11 +38,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     public GameObject shieldGO;
 
     public bool canMove = true;
-    public bool turboShooting = false;
-    public bool hasShield = false;
-    public bool canDestroyBush = false;
-    public bool canMoveOnWater = false;
-    public bool canDestroyIron = false;
+    private bool turboShooting = false;
+    private bool hasShield = false;
+    private bool canDestroyBush = false;
+    private bool canMoveOnWater = false;
+    private bool canDestroyIron = false;
     #endregion
     #region
     private float currentShootingTime;
@@ -202,6 +202,20 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void Damage(int damage, Vector3 rotationOfBullet, bool ironCanDestroy)
     {
         if (hasShield) return;
+        if (boatGO.activeInHierarchy)
+        {
+            ActivateBoat();
+            return;
+        }
+        audioManager.PlaySound(SoundName.DestroyingPlayer);
+        health--;
+        canMove = false;
+        playerParticleSystem.Play();
+        GetComponent<Collider2D>().enabled = false;
+        playerDamaged?.Invoke(this, gameObject);
+    }
+    public void BombDestroying()
+    {
         audioManager.PlaySound(SoundName.DestroyingPlayer);
         health--;
         canMove = false;
@@ -215,8 +229,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public void ActivateBoat()
     {
-        boatGO.SetActive(true);
-        canMoveOnWater = true;
+        boatGO.SetActive(!boatGO.activeInHierarchy);
+        canMoveOnWater = !canMoveOnWater;
     }
     public void ShootingBonus()
     {
@@ -229,9 +243,26 @@ public class PlayerController : MonoBehaviour, IDamageable
             turboShooting = true;
         }
     }
-    public void CanDestroyBush()
+    public void SetActiveDestoyBush()
     {
         canDestroyBush = true;
+    }
+
+    public bool CanDestroyBush()
+    {
+        return canDestroyBush;
+    }
+    public bool CanDestroyIron()
+    {
+        return canDestroyIron;
+    }
+    public bool CanMoveOnWater()
+    {
+        return canMoveOnWater;
+    }
+    public bool HaveTurboShooting()
+    {
+        return turboShooting;
     }
     public IEnumerator SetActiveShield(float shieldTime)
     {

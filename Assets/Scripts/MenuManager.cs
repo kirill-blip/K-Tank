@@ -16,14 +16,14 @@ public class MenuManager : MonoBehaviour
     private AudioManager audioManager;
     private PlayerController playerController;
     private EnemySpawnManager enemySpawnManager;
-    private LevelManager levelManager;
+    private LevelLoader levelManager;
     private void Start()
     {
         audioManager = GameObject.FindObjectOfType<AudioManager>().GetComponent<AudioManager>();
 
         try
         {
-            levelManager = GameObject.FindObjectOfType<LevelManager>();
+            levelManager = GameObject.FindObjectOfType<LevelLoader>();
         }
         catch (Exception e)
         {
